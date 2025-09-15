@@ -1,4 +1,4 @@
-package com.chickfish.products.exceptions;
+package com.chickfish.customer.exceptions;
 
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String message) {

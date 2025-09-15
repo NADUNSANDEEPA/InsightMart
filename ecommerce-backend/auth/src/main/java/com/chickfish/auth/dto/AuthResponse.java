@@ -1,4 +1,4 @@
-package com.chickfish.products.dto;
+package com.chickfish.auth.dto;
 
 import lombok.Builder;
 import lombok.Data;

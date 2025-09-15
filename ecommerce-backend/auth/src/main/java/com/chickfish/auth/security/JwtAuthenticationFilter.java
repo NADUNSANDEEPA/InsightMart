@@ -1,6 +1,7 @@
-package com.chickfish.products.security;
+package com.chickfish.auth.security;
 
-import com.chickfish.products.service.JwtService;
+
+import com.chickfish.auth.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

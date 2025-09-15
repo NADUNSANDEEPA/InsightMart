@@ -1,4 +1,8 @@
 package com.chickfish.products.repository;
 
-public class ProductRepository {
+import com.chickfish.products.model.Product;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface ProductRepository extends MongoRepository<Product, String> {
+
 }

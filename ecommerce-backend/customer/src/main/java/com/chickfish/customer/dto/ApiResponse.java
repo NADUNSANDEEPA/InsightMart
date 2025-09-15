@@ -1,4 +1,4 @@
-package com.chickfish.products.dto;
+package com.chickfish.customer.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

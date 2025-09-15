@@ -1,6 +1,6 @@
-package com.chickfish.products.exceptions;
+package com.chickfish.customer.exceptions;
 
-import com.chickfish.products.dto.ApiResponse;
+import com.chickfish.customer.dto.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

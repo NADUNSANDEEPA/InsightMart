@@ -1,4 +1,13 @@
-FROM ubuntu:latest
-LABEL authors="ASUS"
-
-ENTRYPOINT ["top", "-b"]
+version: '4'
+services:
+  mongodb:
+    image: mongo:7.0.5
+    container_name: product-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: springuser
+      MONGO_INITDB_ROOT_PASSWORD: 29AZSaQR9DJSxenw
+      MONGO_INITDB_DATABASE: chickfish
+    volumes:
+      - ./data/mongodb:/data/db

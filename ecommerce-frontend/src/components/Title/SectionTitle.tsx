@@ -15,12 +15,12 @@ const SectionTitle: React.FC<SectionTitleProps> = ({ children }) => {
           fontSize: "1.5rem",
           margin: 0,
           whiteSpace: "nowrap",
-          color: "#38663C",
+          color: "#6e0606ff",
         }}
       >
         {children}
       </h3>
-      <hr style={{ flex: 1, borderColor: "#C6D586", marginLeft: "1rem" }} />
+      <hr style={{ flex: 1, borderColor: "#f1bc88ff", marginLeft: "1rem" }} />
     </div>
   );
 };

@@ -11,6 +11,11 @@ import {
 } from "mdb-react-ui-kit";
 import Logo from '../../assets/logo.ico';
 import GlassEffectButton from "../Button/GlassEffectButton";
+import { useNavigate } from "react-router-dom";
+
+interface NavbarProps {
+  isBgColor?: boolean;
+}
 
 const linkStyle = {
   paddingTop: '30px',
@@ -27,13 +32,14 @@ const hoverStyle = {
 };
 
 const navLinks = [
-  { label: "Home", href: "#" },
+  { label: "Home", href: "./" },
   { label: "About", href: "#" },
   { label: "Contact Us", href: "#" },
   { label: "Category", href: "#" },
 ];
 
-const Navbar = () => {
+const Navbar = ({ isBgColor }: NavbarProps) => {
+  const navigate = useNavigate();
   const [showNav, setShowNav] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -50,12 +56,15 @@ const Navbar = () => {
       expand="lg"
       className="shadow-0"
       style={{
-        position: "sticky",
         top: 0,
         zIndex: 1030,
-        borderRadius:'15px',
-        backgroundColor: scrolled ? "#20292c" : "transparent",
-        transition: "background-color 0.3s ease",
+        borderRadius: '15px',
+        background: isBgColor
+          ? "linear-gradient(135deg, #6e0606ff, #10043aff)"
+          : scrolled
+          ? "#4904041e"
+          : "transparent",
+        transition: "background 0.3s ease",
       }}
     >
       <MDBContainer fluid className="align-items-center">
@@ -70,7 +79,7 @@ const Navbar = () => {
             gap: "10px",
           }}
         >
-          <img src={Logo} alt="Logo" style={{ height: "50px" }} />
+          <img src={Logo} alt="Logo" style={{ height: "100px" }} />
         </MDBNavbarBrand>
 
         {/* Center: Navbar toggler for mobile */}
@@ -83,7 +92,7 @@ const Navbar = () => {
         />
 
         {/* Center: Collapsible nav links */}
-        <MDBCollapse navbar className="order-3 order-lg-1 w-100">
+        <MDBCollapse navbar open={showNav} className="order-3 order-lg-1 w-100">
           <MDBNavbarNav className="mx-auto flex-column flex-lg-row gap-3 justify-content-center">
             {navLinks.map(({ label, href }) => (
               <MDBNavbarItem key={label}>
@@ -100,7 +109,7 @@ const Navbar = () => {
           </MDBNavbarNav>
         </MDBCollapse>
 
-        {/* Right side: Sign Up & Login buttons */}
+        {/* Right side: Cart & My Account buttons */}
         <div className="d-flex gap-2 order-1 order-lg-2" style={{ paddingTop: '20px' }}>
           <GlassEffectButton
             text="Cart"
@@ -118,7 +127,7 @@ const Navbar = () => {
             borderRadius="8px"
             padding="0.5rem 1rem"
             icon="user"
-            onClick={() => alert("Clicked!")}
+            onClick={() => navigate('/login')}
           />
         </div>
       </MDBContainer>

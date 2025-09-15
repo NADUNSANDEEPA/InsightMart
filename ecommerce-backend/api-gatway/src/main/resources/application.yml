@@ -1,0 +1,74 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        # Customer Service Route
+        - id: customer-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/customers/**
+          filters:
+            - StripPrefix=0
+            - PreserveHostHeader=true
+
+        # Product Category Service Route
+        - id: product-category-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/product-categories/**
+          filters:
+            - StripPrefix=0
+            - PreserveHostHeader=true
+
+        # Health check route (optional)
+        - id: health-check
+          uri: http://localhost:8080
+          predicates:
+            - Path=/health
+          filters:
+            - StripPrefix=0
+
+      # Global CORS configuration (fixed)
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOriginPatterns:
+              - "*"       # Use allowedOriginPatterns with allowCredentials
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - "*"
+              - Authorization
+            allowCredentials: true
+
+      # Default filters applied to all routes
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+
+# Logging configuration
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO
+    org.springframework.web: INFO
+    reactor.netty: INFO
+
+# Actuator endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, gateway
+  endpoint:
+    health:
+      show-details: always
+    gateway:
+      enabled: true

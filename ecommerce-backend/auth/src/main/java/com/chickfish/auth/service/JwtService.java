@@ -1,6 +1,7 @@
-package com.chickfish.products.service;
+package com.chickfish.auth.service;
 
 
+import com.chickfish.auth.enums.UserRoles;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +28,7 @@ public class JwtService {
         return generateToken(username, null);
     }
 
-    public String generateToken(String username, String role) {
+    public String generateToken(String username, UserRoles role) {
         JwtBuilder builder = Jwts.builder()
                 .subject(username)
                 .issuedAt(Date.from(Instant.now()))

@@ -4,6 +4,10 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
 
+import Login from "./pages/client/Login";
+import Register from "./pages/client/Register";
+import ProductList from "./pages/client/ProductList";
+
 const queryClient = new QueryClient();
 
 const App: React.FC = () => {
@@ -13,6 +17,9 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/product-list" element={<ProductList />} />
         </Routes>
       </Router>
     </QueryClientProvider>

@@ -2,9 +2,9 @@ version: '4'
 services:
   mongodb:
     image: mongo:7.0.5
-    container_name: product-mongodb
+    container_name: auth-mongodb
     ports:
-      - "27017:27017"
+      - "27019:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: springuser
       MONGO_INITDB_ROOT_PASSWORD: 29AZSaQR9DJSxenw

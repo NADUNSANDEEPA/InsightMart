@@ -1,49 +1,53 @@
-package com.chickfish.products.controller;
+package com.chickfish.auth.controller;
 
-import com.chickfish.products.dto.ApiResponse;
-import com.chickfish.products.dto.AuthRequest;
-import com.chickfish.products.dto.AuthResponse;
-import com.chickfish.products.service.JwtService;
-import lombok.RequiredArgsConstructor;
+import com.chickfish.auth.dto.*;
+import com.chickfish.auth.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
-@RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
+    private final UserService userService;
+
+    @Autowired
+    public AuthController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<ApiResponse<String>> register(@RequestBody RegisterRequest request) {
+        try {
+            String username = userService.register(request);
+            return ResponseEntity.ok(ApiResponse.<String>builder()
+                    .success(true)
+                    .message("User registered successfully")
+                    .data(username)
+                    .build());
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(ApiResponse.<String>builder()
+                    .success(false)
+                    .message(e.getMessage())
+                    .data(null)
+                    .build());
+        }
+    }
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<AuthResponse>> login(@RequestBody AuthRequest request) {
         try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-            );
-
-            String token = jwtService.generateToken(request.getUsername());
-
-            AuthResponse authResponse = AuthResponse.builder()
-                    .token(token)
-                    .username(request.getUsername())
-                    .build();
-
+            AuthResponse authResponse = userService.login(request);
             return ResponseEntity.ok(ApiResponse.<AuthResponse>builder()
                     .success(true)
                     .message("Login successful")
                     .data(authResponse)
                     .build());
-
-        } catch (AuthenticationException e) {
+        } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(ApiResponse.<AuthResponse>builder()
                     .success(false)
-                    .message("Invalid credentials")
+                    .message(e.getMessage())
                     .data(null)
                     .build());
         }
@@ -52,29 +56,16 @@ public class AuthController {
     @PostMapping("/validate")
     public ResponseEntity<ApiResponse<String>> validateToken(@RequestHeader("Authorization") String token) {
         try {
-            if (token.startsWith("Bearer ")) {
-                token = token.substring(7);
-            }
-
-            String username = jwtService.extractUsername(token);
-
-            if (jwtService.isTokenValid(token, username)) {
-                return ResponseEntity.ok(ApiResponse.<String>builder()
-                        .success(true)
-                        .message("Token is valid")
-                        .data(username)
-                        .build());
-            } else {
-                return ResponseEntity.badRequest().body(ApiResponse.<String>builder()
-                        .success(false)
-                        .message("Invalid token")
-                        .data(null)
-                        .build());
-            }
-        } catch (Exception e) {
+            String username = userService.validateToken(token);
+            return ResponseEntity.ok(ApiResponse.<String>builder()
+                    .success(true)
+                    .message("Token is valid")
+                    .data(username)
+                    .build());
+        } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(ApiResponse.<String>builder()
                     .success(false)
-                    .message("Invalid token format")
+                    .message(e.getMessage())
                     .data(null)
                     .build());
         }

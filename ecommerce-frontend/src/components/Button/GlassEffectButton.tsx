@@ -27,7 +27,7 @@ const GlassEffectButton: React.FC<GlassEffectButtonProps> = ({
 
   const baseStyle: CSSProperties = {
     fontFamily: "'Roboto', sans-serif",
-    backgroundColor: "#38663C",
+    backgroundColor: "rgba(146, 21, 21, 1)",
     color: "#d4ebd5ff",
     fontSize: "13px",
     fontWeight: "400",

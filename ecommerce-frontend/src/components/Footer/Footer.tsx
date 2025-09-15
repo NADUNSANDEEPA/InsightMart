@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { MDBFooter, MDBContainer, MDBRow, MDBCol, MDBIcon } from 'mdb-react-ui-kit';
 import Logo from '../../assets/logo.ico';
 
-
 const footerLinkStyle: React.CSSProperties = {
     paddingTop: '5px',
     fontSize: '15px',
@@ -40,7 +39,7 @@ const AppFooter: FC = () => {
     ];
 
     return (
-        <MDBFooter style={{ background: "linear-gradient(135deg, #20292c, #426748)" }} className='text-center text-lg-start text-muted pt-4'>
+        <MDBFooter style={{ background: "linear-gradient(135deg, #6e0606ff, #10043aff)" }} className='text-center text-lg-start text-muted pt-4'>
             {/* Main Footer Content */}
             <section>
                 <MDBContainer className='text-center text-md-start mt-5'>
@@ -52,11 +51,11 @@ const AppFooter: FC = () => {
                                 <img src={Logo} alt="Logo" style={{ height: "90px" }} />
                             </h6>
                             <p style={{ color: "#E4F0E5", fontSize: "14px", fontWeight: 300 }}>
-                                Your trusted supermarket & delivery service bringing fresh groceries,
-                                beverages, and essentials right to your doorstep.
+                                Your trusted online store for fresh fish & meat, delivering premium cuts,
+                                seafood, and poultry directly to your kitchen.
                             </p>
                             <p style={{ color: "#E4F0E5", fontSize: "14px", fontWeight: 300, marginBottom: "4px" , marginTop:'25%' }}>
-                                Jaykay Marketing Services Pvt Ltd.
+                                ChickFish Pvt Ltd.
                             </p>
                             <p style={{ color: "#E4F0E5", fontSize: "14px", fontWeight: 300, marginBottom: "4px"}}>
                                 No:148, Peter Street, Colombo 2.
@@ -65,27 +64,26 @@ const AppFooter: FC = () => {
                                 <MDBIcon fas icon="phone" /> +94 11 2303500
                             </p>
                             <p style={{ color: "#E4F0E5", fontSize: "14px", fontWeight: 300 }}>
-                                (Daily operating hours 8.00 a.m to 8.00 p.m)
+                                (Daily operating hours 7.00 a.m to 9.00 p.m)
                             </p>
                         </MDBCol>
-
 
                         {/* Quick Links */}
                         <MDBCol md="2" lg="2" xl="2" className='mx-auto mb-4'>
                             <h6 className='text-uppercase fw-bold mb-4' style={{ color: '#C6D586' }}>Quick Links</h6>
-                            {["Home", "Catalogue & Deals", "Utility bill payments", "Track my order"].map((item, i) => renderLink(item, i))}
+                            {["Home", "Shop Now", "Track My Order", "Offers"].map((item, i) => renderLink(item, i))}
                         </MDBCol>
 
                         {/* Categories */}
                         <MDBCol md="2" lg="2" xl="2" className='mx-auto mb-4'>
                             <h6 className='text-uppercase fw-bold mb-4' style={{ color: '#C6D586' }}>Categories</h6>
-                            {["Grocery", "Beverages", "Household", "Vegetables", "Fruits"].map((item, i) => renderLink(item, i + 4))}
+                            {["Fresh Fish", "Fresh Meat", "Poultry", "Seafood", "Spices & Marinades"].map((item, i) => renderLink(item, i + 4))}
                         </MDBCol>
 
                         {/* Useful Links */}
                         <MDBCol md="2" lg="2" xl="2" className='mx-auto mb-4'>
                             <h6 className='text-uppercase fw-bold mb-4' style={{ color: '#C6D586' }}>Useful Links</h6>
-                            {["Privacy Notice", "FAQ", "Terms and Conditions", "Stores Delivery", "Grid"].map((item, i) => renderLink(item, i + 9))}
+                            {["Privacy Policy", "FAQ", "Terms & Conditions", "Delivery Info", "Contact Us"].map((item, i) => renderLink(item, i + 9))}
                         </MDBCol>
 
                     </MDBRow>
@@ -95,7 +93,7 @@ const AppFooter: FC = () => {
             {/* Copyright */}
             <div className='text-center p-2'
                 style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)', fontWeight: '300', fontSize: '14px', color: '#E4F0E5' }}>
-                © {new Date().getFullYear()} Keels. All rights reserved.
+                © {new Date().getFullYear()} ChickFish Pvt Ltd. All rights reserved.
             </div>
         </MDBFooter>
     );

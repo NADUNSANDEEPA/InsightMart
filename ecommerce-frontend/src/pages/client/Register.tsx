@@ -305,7 +305,7 @@ const Register: React.FC = () => {
 
                         <div className="mb-4">
                           <MDBInput
-                            label="Religion"
+                            label="Religions"
                             type="text"
                             value={religion}
                             onChange={(e) => setReligion(e.target.value)}

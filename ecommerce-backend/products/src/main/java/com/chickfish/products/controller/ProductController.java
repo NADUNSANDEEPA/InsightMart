@@ -62,7 +62,7 @@ public class ProductController {
         productService.deleteProduct(id);
         return ResponseEntity.ok(ApiResponse.<Void>builder()
                 .success(true)
-                .message("Product deleted successfully")
+                .message("Product deleted successfully.")
                 .build());
     }
 }

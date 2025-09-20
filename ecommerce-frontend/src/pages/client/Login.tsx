@@ -11,6 +11,7 @@ import {
     MDBContainer,
 } from "mdb-react-ui-kit";
 import NormalBtn from "../../components/Button/NormalBtn";
+import bgImage from '../../assets/bg-img-reg.jpg';
 
 const Login: React.FC = () => {
     const [username, setUsername] = useState("");
@@ -25,20 +26,30 @@ const Login: React.FC = () => {
 
     return (
         <div>
-            <div style={{ background: "linear-gradient(135deg, #6e0606ff, #10043aff)" }}>
+            <div
+                style={{
+                    backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,1)), url(${bgImage})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    paddingBottom: "10%",
+                }}
+            >
                 <MDBContainer
                     className="pt-2 pr-5 pl-5 pb-5"
                     style={{
                         minHeight: "100vh",
                     }}
                 >
-                    <Navbar />
+                    <Navbar
+                        isBgColor={true}
+                    />
                     <MDBRow className="align-items-center" style={{ minHeight: "100%", paddingTop: "3%", marginTop: '10%' }}>
                         <MDBCol md="6" lg="4"></MDBCol>
                         <MDBCol md="6" lg="4">
                             <MDBCard className="pt-4 shadow-sm">
                                 <MDBCardTitle className="text-center text-uppercase">Login</MDBCardTitle>
-                                <hr/>
+                                <hr />
                                 <MDBCardBody>
                                     <form onSubmit={handleLogin}>
                                         <MDBInput

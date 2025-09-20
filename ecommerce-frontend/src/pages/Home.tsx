@@ -10,7 +10,7 @@ import {
   MDBCarouselItem,
   MDBIcon,
 } from "mdb-react-ui-kit";
-import HomePageBg from "../assets/fish-meat.png";
+import HomePageBg from "../assets/bg-img-reg.jpg";
 import Navbar from "../components/NavBar/NavBar";
 import Footer from "../components/Footer/Footer";
 import SectionTitle from "../components/Title/SectionTitle";
@@ -21,6 +21,7 @@ import FreshFish from '../assets/itemcategories/fresh-fish.jpg';
 import ProcessedMeat from '../assets/itemcategories/processed-meat.jpg';
 import Seafood from '../assets/itemcategories/seafood.jpg';
 import Spices from '../assets/itemcategories/meat-spices.jpg';
+import ProductCatalog from "../components/ProductCatelog/ProductCatalog";
 
 type Product = {
   img: string;
@@ -51,12 +52,21 @@ const productChunks = chunkArray(products, 5);
 const Home: React.FC = () => {
   return (
     <div>
-      <div style={{ background: "linear-gradient(135deg, #6e0606ff, #10043aff)" }}>
+      <div style={{
+        backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,1)), url('${HomePageBg}')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        minHeight: "100vh",
+        padding: "20px"
+      }}>
         <MDBContainer className="pt-2 pr-5 pl-5 pb-5" style={{ minHeight: "100vh" }}>
-          <Navbar />
-          <MDBRow className="align-items-center" style={{ minHeight: "100%", paddingTop: "3%" }}>
+          <Navbar
+            isBgColor={true}
+          />
+          <MDBRow className="align-items-center" style={{ minHeight: "100%", paddingTop: "15%" }}>
             <MDBCol size="12" md="7" className="mb-4 mb-md-0">
-              <section>
+              <section >
                 <div
                   className="badge p-2 rounded-6"
                   style={{
@@ -67,24 +77,21 @@ const Home: React.FC = () => {
                     fontWeight: "400",
                     backdropFilter: "blur(8px)",
                     WebkitBackdropFilter: "blur(8px)",
-                    border: "1px solid rgba(255,255,255,0.2)", 
+                    border: "1px solid rgba(255,255,255,0.2)",
                   }}
                 >
                   <MDBIcon fas icon="truck" /> Fresh Fish & Meat Delivery
                 </div>
                 <h2 style={{ color: "white", lineHeight: 1.2 }}>
-                  <span style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 900, fontSize: "2.8rem" }}>Premium Fresh Fish & Meat,</span>
+                  <span style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 900, fontSize: "4.9rem" }}>Premium Fresh Fish & Meat,</span>
                   <br />
-                  <span style={{ fontWeight: 300, fontSize: "1.8rem", fontFamily: "'Roboto', sans-serif'" }}>Delivered To Your Doorstep</span>
+                  <hr style={{ width: '80%' }} />
+                  <span style={{ fontWeight: 600, fontSize: "0.9rem", textTransform: 'uppercase', fontFamily: "'Roboto', sans-serif'", letterSpacing: '9px', color:'rgba(186, 186, 154, 1)' }}>Delivered To Your Doorstep</span>
                 </h2>
               </section>
             </MDBCol>
             <MDBCol size="12" md="5" className="d-flex justify-content-center">
-              <img
-                src={HomePageBg}
-                style={{ maxHeight: "90vh", width: "100%", maxWidth: "400px", objectFit: "contain" }}
-                alt="Fish & Meat Delivery"
-              />
+              <ProductCatalog />
             </MDBCol>
           </MDBRow>
         </MDBContainer>

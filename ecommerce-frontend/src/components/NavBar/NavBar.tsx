@@ -14,7 +14,11 @@ import GlassEffectButton from "../Button/GlassEffectButton";
 import { useNavigate } from "react-router-dom";
 
 interface NavbarProps {
-  isBgColor?: boolean;
+  isBgColor?: boolean;        
+  bgColor?: string;            
+  bgGradient?: string;          
+  bgImage?: string;             
+  overlayColor?: string;        
 }
 
 const linkStyle = {
@@ -38,7 +42,13 @@ const navLinks = [
   { label: "Category", href: "#" },
 ];
 
-const Navbar = ({ isBgColor }: NavbarProps) => {
+const Navbar = ({
+  isBgColor,
+  bgColor,
+  bgGradient,
+  bgImage,
+  overlayColor,
+}: NavbarProps) => {
   const navigate = useNavigate();
   const [showNav, setShowNav] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -51,6 +61,25 @@ const Navbar = ({ isBgColor }: NavbarProps) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Determine background style
+  let backgroundStyle = "transparent";
+  if (isBgColor) {
+    if (bgImage) {
+      // Image with optional overlay
+      backgroundStyle = overlayColor
+        ? `linear-gradient(${overlayColor}, ${overlayColor}), url('${bgImage}')`
+        : `url('${bgImage}')`;
+    } else if (bgGradient) {
+      backgroundStyle = bgGradient;
+    } else if (bgColor) {
+      backgroundStyle = bgColor;
+    } else {
+      backgroundStyle = "linear-gradient(135deg, #470b0bff, #000000ff)";
+    }
+  } else if (scrolled) {
+    backgroundStyle = "#4904041e"; // semi-transparent on scroll
+  }
+
   return (
     <MDBNavbar
       expand="lg"
@@ -59,11 +88,10 @@ const Navbar = ({ isBgColor }: NavbarProps) => {
         top: 0,
         zIndex: 1030,
         borderRadius: '15px',
-        background: isBgColor
-          ? "linear-gradient(135deg, #6e0606ff, #10043aff)"
-          : scrolled
-          ? "#4904041e"
-          : "transparent",
+        background: backgroundStyle,
+        backgroundSize: bgImage ? "cover" : undefined,
+        backgroundPosition: bgImage ? "center" : undefined,
+        backgroundRepeat: bgImage ? "no-repeat" : undefined,
         transition: "background 0.3s ease",
       }}
     >
@@ -110,13 +138,13 @@ const Navbar = ({ isBgColor }: NavbarProps) => {
         </MDBCollapse>
 
         {/* Right side: Cart & My Account buttons */}
-        <div className="d-flex gap-2 order-1 order-lg-2" style={{ paddingTop: '20px' }}>
+        <div className="d-flex gap-2 order-1 order-lg-2 pe-5" style={{ paddingTop: '20px' }}>
           <GlassEffectButton
             text="Cart"
             borderSize="0px"
             shadow="0 4px 10px rgba(50, 70, 56, 0.4)"
             borderRadius="8px"
-            padding="0.5rem 1rem"
+            padding="0.8rem 1.5rem"
             icon="shopping-cart"
             onClick={() => alert("Clicked!")}
           />
@@ -125,7 +153,7 @@ const Navbar = ({ isBgColor }: NavbarProps) => {
             borderSize="0px"
             shadow="0 4px 10px rgba(50, 70, 56, 0.4)"
             borderRadius="8px"
-            padding="0.5rem 1rem"
+            padding="0.8rem 1.5rem"
             icon="user"
             onClick={() => navigate('/login')}
           />

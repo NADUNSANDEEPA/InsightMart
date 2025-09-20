@@ -8,13 +8,10 @@ import {
   MDBCol,
   MDBRow,
   MDBInput,
-  MDBContainer,
-  MDBDropdown,
-  MDBDropdownMenu,
-  MDBDropdownToggle,
-  MDBDropdownItem,
+  MDBContainer
 } from "mdb-react-ui-kit";
 import NormalBtn from "../../components/Button/NormalBtn";
+import bgImage from '../../assets/bg-img-reg.jpg';
 
 const Register: React.FC = () => {
   const [step, setStep] = useState(1);
@@ -96,9 +93,9 @@ const Register: React.FC = () => {
   };
 
   const handleNext = () => {
-    if (validateStep1()) {
-      setStep(2);
-    }
+    //  if (validateStep1()) {
+    setStep(2);
+    //}
   };
 
   const handleBack = () => {
@@ -109,7 +106,10 @@ const Register: React.FC = () => {
     <div>
       <div
         style={{
-          background: "linear-gradient(135deg, #6e0606ff, #10043aff)",
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,1)),  url(${bgImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
           paddingBottom: "10%",
         }}
       >
@@ -119,7 +119,9 @@ const Register: React.FC = () => {
             minHeight: "100vh",
           }}
         >
-          <Navbar />
+          <Navbar
+            isBgColor={true}
+          />
           <MDBRow
             className="align-items-center"
             style={{ minHeight: "100%", paddingTop: "3%", marginTop: "10%" }}
@@ -250,28 +252,25 @@ const Register: React.FC = () => {
                         </div>
 
                         <div className="mb-4">
-                          <MDBDropdown>
-                            <MDBDropdownToggle caret>
-                              {province || "Select Province"}
-                            </MDBDropdownToggle>
-                            <MDBDropdownMenu>
-                              {["Central", "Western", "Southern", "Northern"].map((prov) => (
-                                <MDBDropdownItem
-                                  key={prov}
-                                  link
-                                  onClick={() => setProvince(prov)}
-                                >
-                                  {prov}
-                                </MDBDropdownItem>
-                              ))}
-                            </MDBDropdownMenu>
-                          </MDBDropdown>
+                          <select
+                            className="form-select"
+                            value={province}
+                            onChange={(e) => setProvince(e.target.value)}
+                          >
+                            <option value="">Select Province</option>
+                            <option value="Central">Central</option>
+                            <option value="Western">Western</option>
+                            <option value="Southern">Southern</option>
+                            <option value="Northern">Northern</option>
+                          </select>
+
                           {errors.province && (
                             <div className="text-danger" style={{ fontSize: "12px" }}>
                               {errors.province}
                             </div>
                           )}
                         </div>
+
 
                         <div className="mb-4">
                           <MDBInput
@@ -304,13 +303,21 @@ const Register: React.FC = () => {
                         </div>
 
                         <div className="mb-4">
-                          <MDBInput
-                            label="Religions"
-                            type="text"
+                          <select
+                            className="form-select"
                             value={religion}
                             onChange={(e) => setReligion(e.target.value)}
                             style={{ fontSize: "14px" }}
-                          />
+                          >
+                            <option value="">Select Religion</option>
+                            <option value="Buddhism">Buddhism</option>
+                            <option value="Hinduism">Hinduism</option>
+                            <option value="Islam">Islam</option>
+                            <option value="Christianity">Christianity</option>
+                            <option value="Roman Catholicism">Roman Catholicism</option>
+                            <option value="Other">Other</option>
+                          </select>
+
                           {errors.religion && (
                             <div className="text-danger" style={{ fontSize: "12px" }}>
                               {errors.religion}
@@ -318,14 +325,19 @@ const Register: React.FC = () => {
                           )}
                         </div>
 
+
                         <div className="mb-4">
-                          <MDBInput
-                            label="Allergies"
-                            type="text"
+                          <select
+                            className="form-select"
                             value={allergies}
                             onChange={(e) => setAllergies(e.target.value)}
                             style={{ fontSize: "14px" }}
-                          />
+                          >
+                            <option value="">Do you have allergies?</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                          </select>
+
                           {errors.allergies && (
                             <div className="text-danger" style={{ fontSize: "12px" }}>
                               {errors.allergies}
@@ -333,14 +345,16 @@ const Register: React.FC = () => {
                           )}
                         </div>
 
+
                         <div className="d-flex justify-content-between">
                           <NormalBtn
                             text="Back"
                             color="secondary"
-                            backgroundColor="gray"
-                            borderColor="#ccc"
+                            outline
+                            borderColor="rgba(255, 255, 255, 1)"
                             borderSize="2px"
                             borderRadius="12px"
+                            textColor="rgba(98, 17, 40, 1)"
                             shadow="none"
                             padding="0.5rem 1.5rem"
                             size="lg"
@@ -363,7 +377,9 @@ const Register: React.FC = () => {
                             icon="user"
                             type="submit"
                             rounded
+                            outline={false} // <-- ensures filled button
                           />
+
                         </div>
                       </>
                     )}

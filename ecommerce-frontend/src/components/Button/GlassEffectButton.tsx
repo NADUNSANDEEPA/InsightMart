@@ -29,7 +29,7 @@ const GlassEffectButton: React.FC<GlassEffectButtonProps> = ({
     fontFamily: "'Roboto', sans-serif",
     backgroundColor: "rgba(146, 21, 21, 1)",
     color: "#d4ebd5ff",
-    fontSize: "13px",
+    fontSize: "16px",
     fontWeight: "400",
     display: "inline-flex",
     alignItems: "center",

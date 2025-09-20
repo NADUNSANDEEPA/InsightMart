@@ -17,54 +17,77 @@ type MDBColor =
   | "tertiary"
   | undefined;
 
+type BtnSize = "sm" | "md" | "lg" | "xl";
+
 interface NormalBtnProps {
   text?: string;
-  color?: MDBColor;
+  color?: MDBColor; // MDBBtn color
+  textColor?: string; // new: text color
+  size?: BtnSize; 
+  outline?: boolean; 
+  rounded?: boolean; 
+  icon?: string; 
+  onClick?: () => void;
+  disabled?: boolean;
   backgroundColor?: string;
   borderColor?: string;
   borderSize?: string;
   borderRadius?: string;
   shadow?: string;
   padding?: string;
-  size?: "sm" | "lg";
-  outline?: boolean;
-  block?: boolean;
-  rounded?: boolean;
-  icon?: string;
-  onClick?: () => void;
-  disabled?: boolean;
-  style?: React.CSSProperties;
   className?: string;
+  style?: React.CSSProperties;
   type?: "button" | "submit" | "reset";
 }
 
 const NormalBtn: React.FC<NormalBtnProps> = ({
   text,
   color = "primary",
+  textColor,
+  size = "md",
+  outline = false,
+  rounded = false,
+  icon,
+  onClick,
+  disabled = false,
   backgroundColor,
   borderColor,
   borderSize,
   borderRadius,
   shadow,
   padding,
-  size,
-  outline = false,
-  block = false,
-  rounded = false,
-  icon,
-  onClick,
-  disabled = false,
-  style,
   className,
+  style,
   type = "button",
 }) => {
+  const computedBorderRadius = rounded
+    ? size === "sm"
+      ? "12px"
+      : size === "md"
+      ? "16px"
+      : size === "lg"
+      ? "20px"
+      : "24px"
+    : borderRadius || "4px";
+
+  const computedPadding =
+    padding ||
+    (size === "sm"
+      ? "6px 12px"
+      : size === "md"
+      ? "8px 16px"
+      : size === "lg"
+      ? "10px 20px"
+      : "12px 24px");
+
   const customStyles: React.CSSProperties = {
-    backgroundColor: backgroundColor,
-    borderColor: borderColor,
+    backgroundColor: outline ? "transparent" : backgroundColor,
+    borderColor,
     borderWidth: borderSize,
-    borderRadius: borderRadius,
+    borderRadius: computedBorderRadius,
     boxShadow: shadow,
-    padding: padding,
+    padding: computedPadding,
+    color: textColor, 
     ...style,
   };
 
@@ -72,8 +95,7 @@ const NormalBtn: React.FC<NormalBtnProps> = ({
     <MDBBtn
       color={color}
       outline={outline}
-      size={size}
-      block={block}
+      size={size === "sm" ? "sm" : size === "md" ? undefined : "lg"} 
       rounded={rounded}
       onClick={onClick}
       disabled={disabled}

@@ -18,7 +18,7 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
+    @PreAuthorize("hasRole('NEWVISITOR')")
     public ResponseEntity<ApiResponse<Customer>> createCustomer(@RequestBody Customer customer) {
         Customer created = customerService.createCustomer(customer);
         return ResponseEntity.ok(ApiResponse.<Customer>builder()

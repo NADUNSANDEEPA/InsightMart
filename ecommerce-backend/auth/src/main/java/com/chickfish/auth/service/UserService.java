@@ -2,6 +2,7 @@ package com.chickfish.auth.service;
 
 import com.chickfish.auth.dto.*;
 import com.chickfish.auth.entity.User;
+import com.chickfish.auth.enums.UserRoles;
 import com.chickfish.auth.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,6 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 
 @Service
@@ -56,7 +59,7 @@ public class UserService {
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
             );
 
-            User user = (User) authentication.getPrincipal(); // cast to our entity
+            User user = (User) authentication.getPrincipal();
 
             String token = jwtService.generateToken(user.getUsername(), user.getRole());
 
@@ -86,5 +89,31 @@ public class UserService {
         } else {
             throw new RuntimeException("Invalid token");
         }
+    }
+
+    public AuthResponse visitorReg(TokenInitializeRequest request) {
+
+        String rawPassword = UUID.randomUUID().toString();
+
+        User user = User.builder()
+                .username(request.getMacAddress())
+                .password(passwordEncoder.encode(rawPassword))
+                .role(UserRoles.NEWVISITOR)
+                .build();
+
+        userRepository.save(user);
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getMacAddress(), rawPassword)
+        );
+
+        User authUser = (User) authentication.getPrincipal();
+
+        String token = jwtService.generateToken(authUser.getUsername(), authUser.getRole());
+
+        return AuthResponse.builder()
+                .token(token)
+                .username(authUser.getUsername())
+                .build();
     }
 }

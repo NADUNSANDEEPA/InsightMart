@@ -17,6 +17,26 @@ public class AuthController {
         this.userService = userService;
     }
 
+    @PostMapping("/visitor-reg")
+    public ResponseEntity<?> visitorReg(@RequestBody TokenInitializeRequest request) {
+        try {
+            AuthResponse response = userService.visitorReg(request);
+
+            return ResponseEntity.ok(ApiResponse.<AuthResponse>builder()
+                    .success(true)
+                    .message("Visitor registered successfully")
+                    .data(response)
+                    .build());
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(ApiResponse.<String>builder()
+                    .success(false)
+                    .message(e.getMessage())
+                    .data(null)
+                    .build());
+        }
+    }
+
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<String>> register(@RequestBody RegisterRequest request) {
         try {

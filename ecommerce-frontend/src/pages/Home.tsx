@@ -83,7 +83,7 @@ const Home: React.FC = () => {
                   <MDBIcon fas icon="truck" /> Fresh Fish & Meat Delivery
                 </div>
                 <h2 style={{ color: "white", lineHeight: 1.2 }}>
-                  <span style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 900, fontSize: "4.9rem" }}>Premium Fresh Fish & Meat,</span>
+                  <span style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 900, fontSize: "4.9rem" }}>Premium Fresh Fish & Meat.</span>
                   <br />
                   <hr style={{ width: '80%' }} />
                   <span style={{ fontWeight: 600, fontSize: "0.9rem", textTransform: 'uppercase', fontFamily: "'Roboto', sans-serif'", letterSpacing: '9px', color:'rgba(186, 186, 154, 1)' }}>Delivered To Your Doorstep</span>

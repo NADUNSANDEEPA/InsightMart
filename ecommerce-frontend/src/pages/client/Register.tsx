@@ -90,6 +90,8 @@ const Register: React.FC = () => {
     console.log("Family Size:", familySize);
     console.log("Religion:", religion);
     console.log("Allergies:", allergies);
+
+    
   };
 
   const handleNext = () => {

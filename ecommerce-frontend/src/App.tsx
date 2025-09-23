@@ -8,6 +8,8 @@ import Login from "./pages/client/Login";
 import Register from "./pages/client/Register";
 import ProductList from "./pages/client/ProductList";
 
+import AdminDashboard from "./pages/admin/AdminDashboard";
+
 const queryClient = new QueryClient();
 
 const App: React.FC = () => {
@@ -20,6 +22,8 @@ const App: React.FC = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/product-list" element={<ProductList />} />
+
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
         </Routes>
       </Router>
     </QueryClientProvider>

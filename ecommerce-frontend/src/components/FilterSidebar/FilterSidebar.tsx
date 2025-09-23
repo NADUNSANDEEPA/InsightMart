@@ -5,8 +5,7 @@ import {
   MDBDropdown,
   MDBDropdownToggle,
   MDBDropdownMenu,
-  MDBDropdownItem,
-  MDBBtn,
+  MDBDropdownItem
 } from "mdb-react-ui-kit";
 import NormalBtn from "../Button/NormalBtn";
 
@@ -35,7 +34,7 @@ const FilterSidebar: React.FC<{
   };
 
   return (
-    <MDBCol md="2">
+    <MDBCol md="3" className="h-100">
       <MDBCard className="bg-white border pt-4 px-3">
         {/* Heading */}
         <h6 style={{ lineHeight: "0%", fontSize: "15px" }}>

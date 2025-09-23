@@ -39,7 +39,7 @@ const AppFooter: FC = () => {
     ];
 
     return (
-        <MDBFooter style={{ background: "linear-gradient(135deg, #6e0606ff, #10043aff)" }} className='text-center text-lg-start text-muted pt-4'>
+        <MDBFooter style={{ background: "linear-gradient(135deg, #470b0bff, #000000ff)" }} className='text-center text-lg-start text-muted pt-4'>
             {/* Main Footer Content */}
             <section>
                 <MDBContainer className='text-center text-md-start mt-5'>

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../components/NavBar/NavBar";
 import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBBtn, MDBCardImage } from "mdb-react-ui-kit";
 import FilterSidebar from "../../components/FilterSidebar/FilterSidebar";
 import CommonBG from '../../assets/common-bg.webp';
+import { ProductCategoryService } from "../../services/ProductCategoryService";
 
 const categories = {
     Electronics: ["Mobiles", "Laptops", "Accessories"],
@@ -13,6 +14,19 @@ const ProductList: React.FC = () => {
     const [categoryFilter, setCategoryFilter] = useState("");
     const [subCategoryFilter, setSubCategoryFilter] = useState("");
 
+    const [productCategories, setProductCategories] = useState<any[]>([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+              const res = await ProductCategoryService.getAll();
+              setProductCategories(res.data || []);
+            } catch (error) {
+              console.error("Error fetching categories:", error);
+            }
+          };
+        fetchCategories();
+    }, []);
     return (
         <div>
             <div
@@ -37,6 +51,7 @@ const ProductList: React.FC = () => {
                     <Navbar isBgColor={true} />
                     <MDBRow className="mt-4">
                         <FilterSidebar
+                            productCategories={productCategories}
                             onCategoryChange={setCategoryFilter}
                             onSubCategoryChange={setSubCategoryFilter}
                         />

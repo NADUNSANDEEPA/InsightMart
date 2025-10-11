@@ -15,13 +15,14 @@ import CommonBG from "../../assets/common-bg.webp";
 import Footer from "../../components/AdminLayout/Footer/Footer";
 import Navbar from "../../components/AdminLayout/NavBar/NavBar";
 import Product from "./panels/Product";
-import ProductCategory from "./panels/ProductCategory";
+import ProductCategoryPanel from "./panels/ProductCategoryPanel";
+
 
 const menuItems = [
   { key: "overview", label: "Overview", icon: "tachometer-alt" },
   { key: "users", label: "Manage Users", icon: "users" },
-  { key: "product", label: "Manage Product", icon: "users" },
-  { key: "product-category", label: "Manage Product Category", icon: "users" },
+  { key: "product", label: "Manage Product", icon: "box" },
+  { key: "product-category", label: "Manage Product Category", icon: "tags" },
   { key: "reports", label: "Reports", icon: "file-alt" },
   { key: "settings", label: "Settings", icon: "cog" },
 ];
@@ -33,8 +34,7 @@ const AdminDashboard: React.FC = () => {
   return (
     <div
       style={{
-        backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)),
-          url('${CommonBG}')`,
+        backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('${CommonBG}')`,
         backgroundRepeat: "repeat",
         backgroundSize: "35% 35%",
         backgroundPosition: "top left",
@@ -52,21 +52,15 @@ const AdminDashboard: React.FC = () => {
           <MDBCol md={collapsed ? "1" : "3"} className="mb-4">
             <MDBCard className="shadow-sm h-100">
               <MDBCardBody className="p-2">
-                {/* Collapse / Expand Button */}
                 <div className="d-flex justify-content-between align-items-center mb-3">
-                  {!collapsed && (
-                    <MDBCardTitle className="mb-0">Admin Menu</MDBCardTitle>
-                  )}
+                  {!collapsed && <MDBCardTitle className="mb-0">Admin Menu</MDBCardTitle>}
                   <MDBBtn
                     size="sm"
                     color="light"
                     className="shadow-0"
                     onClick={() => setCollapsed(!collapsed)}
                   >
-                    <MDBIcon
-                      fas
-                      icon={collapsed ? "angle-double-right" : "angle-double-left"}
-                    />
+                    <MDBIcon fas icon={collapsed ? "angle-double-right" : "angle-double-left"} />
                   </MDBBtn>
                 </div>
 
@@ -104,6 +98,8 @@ const AdminDashboard: React.FC = () => {
                     <p>Admin can add, edit, or remove users.</p>
                   </>
                 )}
+                {activeSection === "product" && <Product />}
+                {activeSection === "product-category" && <ProductCategoryPanel />}
                 {activeSection === "reports" && (
                   <>
                     <MDBCardTitle>Reports</MDBCardTitle>
@@ -114,16 +110,6 @@ const AdminDashboard: React.FC = () => {
                   <>
                     <MDBCardTitle>Settings</MDBCardTitle>
                     <p>Configure application settings.</p>
-                  </>
-                )}
-                {activeSection === "product" && (
-                  <>
-                    <Product/>
-                  </>
-                )}
-                {activeSection === "product-category" && (
-                  <>
-                    <ProductCategory/>
                   </>
                 )}
               </MDBCardBody>

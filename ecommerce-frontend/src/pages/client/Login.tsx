@@ -12,16 +12,41 @@ import {
 } from "mdb-react-ui-kit";
 import NormalBtn from "../../components/Button/NormalBtn";
 import bgImage from '../../assets/bg-img-reg.jpg';
+import { AuthService } from "../../services/AuthService";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+
 
 const Login: React.FC = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
-    const handleLogin = (e: React.FormEvent) => {
-        e.preventDefault();
-        // TODO: Replace with real login logic
-        console.log("Username:", username);
-        console.log("Password:", password);
+    const handleLogin = async () => {
+        console.log("Call Service");
+
+        try {
+            const res = await AuthService.login("admin", "admin");
+
+            console.log("✅ Token:", res.data.token);
+            await Swal.fire({
+                icon: "success",
+                title: "Login Successful!",
+                text: `Welcome back, ${res.data.username}!`,
+                timer: 2000,
+                showConfirmButton: false,
+            });
+            localStorage.setItem("token", res.data.token);
+            navigate("/admin-dashboard");
+
+        } catch (error: any) {
+            console.error("❌ Login failed:", error.message);
+            await Swal.fire({
+                icon: "error",
+                title: "Login Failed",
+                text: error.message || "Something went wrong. Please try again.",
+            });
+        }
     };
 
     return (
@@ -51,7 +76,7 @@ const Login: React.FC = () => {
                                 <MDBCardTitle className="text-center text-uppercase">Login</MDBCardTitle>
                                 <hr />
                                 <MDBCardBody>
-                                    <form onSubmit={handleLogin}>
+                                    <form>
                                         <MDBInput
                                             label="Username"
                                             type="text"
@@ -80,7 +105,7 @@ const Login: React.FC = () => {
                                                 padding="0.5rem 1.5rem"
                                                 size="lg"
                                                 icon="user"
-                                                onClick={() => console.log("Clicked!")}
+                                                onClick={handleLogin}
                                                 rounded
                                             />
 

@@ -5,60 +5,144 @@ import {
     MDBCardTitle,
     MDBCol,
     MDBRow,
-    MDBTable,
-    MDBTableHead,
-    MDBTableBody,
     MDBInput,
     MDBBtn,
+    MDBSpinner,
 } from "mdb-react-ui-kit";
+import Swal from "sweetalert2";
+import { ProductCategoryService } from "../../../services/ProductCategoryService";
+import { ProductService } from "../../../services/ProductService";
+import type { Product } from "../../../interface/Product";
+import type { ProductCategory } from "../../../interface/ProductCategory";
+import PaginatedTable from "../../../components/Table/PaginatedTable";
 
-interface ProductCategory {
-    id: string;
-    name: string;
-}
-
-const Product: React.FC = () => {
+const ProductPanel: React.FC = () => {
     const [formData, setFormData] = useState({
         productName: "",
         productDescription: "",
-        currentPrice: "",
-        currentStock: "",
+        currentPrice: "0",
+        currentStock: "0",
         productCategory: "",
     });
-
     const [categories, setCategories] = useState<ProductCategory[]>([]);
+    const [products, setProducts] = useState<Product[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [loadingProducts, setLoadingProducts] = useState(false);
+    const [loadingCategories, setLoadingCategories] = useState(false);
+    const rowsPerPage = 5;
+
+    // Fetch Categories
+    const fetchCategories = async () => {
+        setLoadingCategories(true);
+        try {
+            const res = await ProductCategoryService.getAll();
+            setCategories(res.data || []);
+        } catch (error) {
+            console.error("Error fetching categories:", error);
+        } finally {
+            setLoadingCategories(false);
+        }
+    };
+
+    // Fetch Products
+    const fetchProducts = async () => {
+        setLoadingProducts(true);
+        try {
+            const res = await ProductService.getAll();
+            const productsWithId = (res.data || []).map((p: Product) => ({
+                ...p,
+                id: p.id || p.productCode, // Ensure id exists for table
+                productCategory: p.productCategory || { subCategoryName: "-" },
+            }));
+            setProducts(productsWithId);
+            setCurrentPage(1);
+        } catch (error) {
+            console.error("Error fetching products:", error);
+        } finally {
+            setLoadingProducts(false);
+        }
+    };
 
     useEffect(() => {
-        setCategories([
-            { id: "1", name: "Fish" },
-            { id: "2", name: "Meat" },
-            { id: "3", name: "Vegetables" },
-        ]);
+        fetchCategories();
+        fetchProducts();
     }, []);
 
     const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
     ) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleAdd = () => {
-        const productPayload = {
-            ...formData,
+    const handleAdd = async () => {
+        const categoryObj = categories.find(cat => cat.id === formData.productCategory);
+        const payload: Product = {
+            id: Math.floor(Math.random() * 1000000).toString(),
+            productCode: Math.floor(Math.random() * 1000000).toString(),
+            productName: formData.productName,
+            productDescription: formData.productDescription,
             currentPrice: parseFloat(formData.currentPrice),
-            currentStock: parseFloat(formData.currentStock),
+            currentStock: parseInt(formData.currentStock, 10),
+            productCategory: categoryObj as ProductCategory,
         };
 
-        console.log("New Product:", productPayload);
+        try {
+            await ProductService.create(payload);
+            await Swal.fire({
+                icon: "success",
+                title: "Product Added",
+                text: `${formData.productName} was successfully added!`,
+                timer: 2000,
+                showConfirmButton: false,
+            });
+            setFormData({
+                productName: "",
+                productDescription: "",
+                currentPrice: "",
+                currentStock: "",
+                productCategory: "",
+            });
+            fetchProducts();
+        } catch (error: any) {
+            Swal.fire({
+                icon: "error",
+                title: "Failed to Add Product",
+                text: error.message || "Something went wrong",
+            });
+        }
+    };
 
-        alert(`Product Added: ${formData.productName}`);
-        setFormData({
-            productName: "",
-            productDescription: "",
-            currentPrice: "",
-            currentStock: "",
-            productCategory: "",
+    const handleDelete = async (id: string) => {
+        const result = await Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete it!",
         });
+
+        if (result.isConfirmed) {
+            try {
+                await ProductService.delete(id);
+                Swal.fire("Deleted!", "Product has been deleted.", "success");
+                fetchProducts();
+            } catch (error: any) {
+                Swal.fire("Error", error.message || "Failed to delete product.", "error");
+            }
+        }
+    };
+
+    const handleEdit = (product: Product) => {
+        setFormData({
+            productName: product.productName,
+            productDescription: product.productDescription,
+            currentPrice: (product.currentPrice === null) ? "" : product.currentPrice.toString(),
+            currentStock: (product.currentStock === null) ? "" : product.currentStock.toString(),
+            productCategory: product.productCategory.id,
+        });
+
     };
 
     return (
@@ -69,19 +153,28 @@ const Product: React.FC = () => {
                     <MDBCard className="border shadow-0 mb-4">
                         <MDBCardBody>
                             <MDBCardTitle>Product List</MDBCardTitle>
-                            <MDBTable hover responsive table-bordered border-primary>
-                                <MDBTableHead style={{ backgroundColor: 'black' }}>
-                                    <tr>
-                                        <th className="text-white">Product</th>
-                                        <th className="text-white">Price ($)</th>
-                                        <th className="text-white">Stock Availability</th>
-                                        <th className="text-white">Action</th>
-                                    </tr>
-                                </MDBTableHead>
-                                <MDBTableBody>
-
-                                </MDBTableBody>
-                            </MDBTable>
+                            {loadingProducts ? (
+                                <div className="text-center my-5">
+                                    <MDBSpinner role="status">
+                                        <span className="visually-hidden">Loading...</span>
+                                    </MDBSpinner>
+                                </div>
+                            ) : (
+                                <PaginatedTable
+                                    columns={[
+                                        { label: "Name", field: "productName" },
+                                        { label: "Price ($)", field: "currentPrice" },
+                                        { label: "Stock (Kg)", field: "currentStock" },
+                                        { label: "Category", field: "productCategory.subCategoryName" },
+                                    ]}
+                                    data={products}
+                                    currentPage={currentPage}
+                                    rowsPerPage={rowsPerPage}
+                                    onPageChange={setCurrentPage}
+                                    onEdit={handleEdit}
+                                    onDelete={handleDelete}
+                                />
+                            )}
                         </MDBCardBody>
                     </MDBCard>
                 </MDBCol>
@@ -92,24 +185,25 @@ const Product: React.FC = () => {
                         <MDBCardBody>
                             <MDBCardTitle className="mb-4">Add Product</MDBCardTitle>
 
-                            {/* Product Name */}
                             <label>Product Name</label>
                             <MDBInput
-                                label=""
                                 name="productName"
                                 value={formData.productName}
                                 onChange={handleChange}
                                 className="mb-4"
                             />
 
-                            {/* Description */}
-                            <label className="form-label">Description</label>
-                            <textarea rows={5} className="form-control mb-4"></textarea>
+                            <label>Description</label>
+                            <textarea
+                                rows={5}
+                                name="productDescription"
+                                value={formData.productDescription}
+                                onChange={handleChange}
+                                className="form-control mb-4"
+                            />
 
-                            {/* Price */}
                             <label>Current Price</label>
                             <MDBInput
-                                label=""
                                 name="currentPrice"
                                 type="number"
                                 value={formData.currentPrice}
@@ -117,10 +211,8 @@ const Product: React.FC = () => {
                                 className="mb-4"
                             />
 
-                            {/* Stock */}
                             <label>Current Stock</label>
                             <MDBInput
-                                label=""
                                 name="currentStock"
                                 type="number"
                                 value={formData.currentStock}
@@ -128,29 +220,31 @@ const Product: React.FC = () => {
                                 className="mb-4"
                             />
 
-                            {/* Category */}
-                            <label className="form-label">Product Category</label>
-                            <select
-                                className="form-select mb-3"
-                                name="productCategory"
-                                value={formData.productCategory}
-                                onChange={handleChange}
-                            >
-                                <option value="">-- Select Category --</option>
-                                {categories.map((cat) => (
-                                    <option key={cat.id} value={cat.id}>
-                                        {cat.name}
-                                    </option>
-                                ))}
-                            </select>
+                            <label>Product Category</label>
+                            {loadingCategories ? (
+                                <div className="text-center my-3">
+                                    <MDBSpinner size="sm" role="status">
+                                        <span className="visually-hidden">Loading...</span>
+                                    </MDBSpinner>
+                                </div>
+                            ) : (
+                                <select
+                                    className="form-select mb-3"
+                                    name="productCategory"
+                                    value={formData.productCategory}
+                                    onChange={handleChange}
+                                >
+                                    <option value="">-- Select Category --</option>
+                                    {categories.map((cat) => (
+                                        <option key={cat.id} value={cat.id}>
+                                            {cat.subCategoryName}
+                                        </option>
+                                    ))}
+                                </select>
+                            )}
 
-                            {/* Submit */}
-                            <MDBBtn
-                                color="dark"
-                                className="shadow-0 w-100"
-                                onClick={handleAdd}
-                            >
-                                Add
+                            <MDBBtn color="dark" className="shadow-0 w-100" onClick={handleAdd}>
+                                Add Product
                             </MDBBtn>
                         </MDBCardBody>
                     </MDBCard>
@@ -160,4 +254,4 @@ const Product: React.FC = () => {
     );
 };
 
-export default Product;
+export default ProductPanel;

@@ -1,7 +1,7 @@
 import type { AxiosError } from "axios";
 import { handleApiError } from "../util/ExceptionHandler";
-import apiClient from "./apiClient";
 import type { ProductCategory } from "../interface/ProductCategory";
+import apiClient from "./ApiClient";
 
 
 export const ProductCategoryService = {
@@ -43,7 +43,7 @@ export const ProductCategoryService = {
 
   delete: async (id: string) => {
     try {
-      const response = await apiClient.delete(`/api/product-categories/${id}`);
+      const response = await apiClient.delete(`/api/product-categories/delete/${id}`);
       return response.data;
     } catch (error: unknown) {
       handleApiError(error as AxiosError);

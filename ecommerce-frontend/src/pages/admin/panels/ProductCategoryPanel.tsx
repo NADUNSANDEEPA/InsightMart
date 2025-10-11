@@ -5,24 +5,28 @@ import {
   MDBCardTitle,
   MDBCol,
   MDBRow,
-  MDBTable,
-  MDBTableHead,
-  MDBTableBody,
   MDBInput,
   MDBBtn,
   MDBIcon,
+  MDBSpinner,
 } from "mdb-react-ui-kit";
 import Swal from "sweetalert2";
 import { ProductCategoryService } from "../../../services/ProductCategoryService";
 import type { ProductCategory } from "../../../interface/ProductCategory";
+import PaginatedTable from "../../../components/Table/PaginatedTable";
 
 const ProductCategoryPanel: React.FC = () => {
   const [formData, setFormData] = useState({
+    id: "",
     category: "",
     subCategory: "",
     description: "",
   });
+
   const [categories, setCategories] = useState<ProductCategory[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const rowsPerPage = 7;
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -31,41 +35,66 @@ const ProductCategoryPanel: React.FC = () => {
   };
 
   const fetchCategories = async () => {
-    const res = await ProductCategoryService.getAll();
-    setCategories(res.data);
+    setLoading(true);
+    try {
+      const res = await ProductCategoryService.getAll();
+      setCategories(res.data || []);
+      setCurrentPage(1);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     fetchCategories();
   }, []);
 
-  const handleAdd = async () => {
+  const handleAddOrEdit = async () => {
+    if (!formData.category || !formData.subCategory) {
+      Swal.fire({
+        icon: "warning",
+        title: "Missing Fields",
+        text: "Please fill in both category and sub-category.",
+      });
+      return;
+    }
+
     const payload: ProductCategory = {
-      id: "",
+      id: formData.id || Math.floor(Math.random() * 1000000).toString(),
       categoryName: formData.category,
       subCategoryName: formData.subCategory,
       description: formData.description,
     };
 
     try {
-      const res = await ProductCategoryService.create(payload);
-      console.log("✅ Category Added:", res);
+      if (formData.id) {
+        await ProductCategoryService.update(payload.id, payload);
+        await Swal.fire({
+          icon: "success",
+          title: "Category Updated",
+          text: `${payload.categoryName} - ${payload.subCategoryName} updated successfully!`,
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      } else {
+        await ProductCategoryService.create(payload);
+        await Swal.fire({
+          icon: "success",
+          title: "Category Added",
+          text: `${payload.categoryName} - ${payload.subCategoryName} added successfully!`,
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      }
 
-      await Swal.fire({
-        icon: "success",
-        title: "Category Added",
-        text: `${formData.category} - ${formData.subCategory} was successfully added!`,
-        timer: 2000,
-        showConfirmButton: false,
-      });
-
-      setFormData({ category: "", subCategory: "", description: "" });
+      setFormData({ id: "", category: "", subCategory: "", description: "" });
       fetchCategories();
     } catch (error: any) {
-      console.error("❌ Failed to add category:", error);
       Swal.fire({
         icon: "error",
-        title: "Failed to Add Category",
+        title: "Failed",
         text: error.message || "Something went wrong",
       });
     }
@@ -74,7 +103,7 @@ const ProductCategoryPanel: React.FC = () => {
   const handleDelete = async (id: string) => {
     const result = await Swal.fire({
       title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      text: "This action cannot be undone!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
@@ -86,8 +115,7 @@ const ProductCategoryPanel: React.FC = () => {
       try {
         await ProductCategoryService.delete(id);
         Swal.fire("Deleted!", "Category has been deleted.", "success");
-        const data = await ProductCategoryService.getAll();
-        setCategories(data);
+        fetchCategories();
       } catch (error: any) {
         Swal.fire("Error", error.message || "Failed to delete category.", "error");
       }
@@ -96,76 +124,51 @@ const ProductCategoryPanel: React.FC = () => {
 
   const handleEdit = (cat: ProductCategory) => {
     setFormData({
+      id: cat.id,
       category: cat.categoryName,
       subCategory: cat.subCategoryName,
       description: cat.description,
     });
   };
 
-5199
-
   return (
     <div className="p-4">
       <MDBRow>
-        {/* Left side - Table */}
         <MDBCol md="8">
           <MDBCard className="border shadow-0 mb-4">
             <MDBCardBody>
               <MDBCardTitle>Product Category List</MDBCardTitle>
-              <MDBTable hover responsive table-bordered="true" border-primary="true">
-                <MDBTableHead style={{ backgroundColor: "black" }}>
-                  <tr>
-                    <th className="text-white">Product Category</th>
-                    <th className="text-white">Product Sub Category</th>
-                    <th className="text-white">Action</th>
-                  </tr>
-                </MDBTableHead>
-                <MDBTableBody>
-                  {categories.length === 0 && (
-                    <tr>
-                      <td colSpan={3} className="text-center">
-                        No categories found.
-                      </td>
-                    </tr>
-                  )}
-                  {categories.map((cat, index) => (
-                    <tr key={index}>
-                      <td>{cat.categoryName}</td>
-                      <td>{cat.subCategoryName}</td>
-                      <td>
-                        <MDBBtn
-                          size="sm"
-                          color="warning"
-                          className="me-2"
-                          outline
-                          onClick={() => handleEdit(cat)}
-                        >
-                          <MDBIcon fas icon="edit" className="me-1" />
-                        </MDBBtn>
-                        <MDBBtn
-                          size="sm"
-                          color="danger"
-                          outline
-                          onClick={() => handleDelete(cat.id)}
-                        >
-                          <MDBIcon fas icon="trash" className="me-1" />
-                        </MDBBtn>
-                      </td>
-                    </tr>
-                  ))}
-                </MDBTableBody>
-              </MDBTable>
+              {loading ? (
+                <div className="text-center my-5">
+                  <MDBSpinner role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </MDBSpinner>
+                </div>
+              ) : (
+                <PaginatedTable
+                  columns={[
+                    { label: "Product Category", field: "categoryName" },
+                    { label: "Product Sub Category", field: "subCategoryName" },
+                  ]}
+                  data={categories}
+                  currentPage={currentPage}
+                  rowsPerPage={rowsPerPage}
+                  onPageChange={setCurrentPage}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
+                />
+              )}
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
 
-        {/* Right side - Form */}
         <MDBCol md="4">
           <MDBCard className="border shadow-0 mb-4">
             <MDBCardBody>
-              <MDBCardTitle className="mb-4">Add Product Category</MDBCardTitle>
+              <MDBCardTitle className="mb-4">
+                {formData.id ? "Edit Category" : "Add Category"}
+              </MDBCardTitle>
 
-              {/* Category Dropdown */}
               <label className="form-label">Product Category</label>
               <select
                 className="form-select mb-4"
@@ -174,22 +177,19 @@ const ProductCategoryPanel: React.FC = () => {
                 onChange={handleChange}
               >
                 <option value="">-- Select Category --</option>
-                <option value="Fish">Fish</option>
+                <option value="Sea Foods">Sea Foods</option>
                 <option value="Meat">Meat</option>
               </select>
 
-              {/* Subcategory */}
               <label className="form-label">Product Sub Category</label>
               <MDBInput
-                label=""
-                id="productSubCategory"
                 name="subCategory"
                 value={formData.subCategory}
                 onChange={handleChange}
                 className="mb-4"
+                placeholder="Enter sub-category name"
               />
 
-              {/* Description */}
               <label className="form-label">Description</label>
               <textarea
                 rows={5}
@@ -197,11 +197,12 @@ const ProductCategoryPanel: React.FC = () => {
                 value={formData.description}
                 onChange={handleChange}
                 className="form-control mb-3"
+                placeholder="Add optional description..."
               />
 
-              {/* Submit Button */}
-              <MDBBtn color="dark" className="shadow-0 w-100" onClick={handleAdd}>
-                Add Category
+              <MDBBtn color="dark" className="shadow-0 w-100" onClick={handleAddOrEdit}>
+                <MDBIcon fas icon={formData.id ? "edit" : "plus"} className="me-2" />
+                {formData.id ? "Save Changes" : "Add Category"}
               </MDBBtn>
             </MDBCardBody>
           </MDBCard>

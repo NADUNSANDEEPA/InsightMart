@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { BASE_URL } from "../config";
 import { handleApiError } from "../util/ExceptionHandler";
-import type { LoginResponse } from "../interface/auth";
+import type { LoginResponse } from "../interface/Auth";
 
 const api = axios.create({
   baseURL: `${BASE_URL}/api/auth`,

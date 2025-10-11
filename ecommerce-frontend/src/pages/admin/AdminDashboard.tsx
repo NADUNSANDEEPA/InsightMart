@@ -20,9 +20,9 @@ import ProductCategoryPanel from "./panels/ProductCategoryPanel";
 
 const menuItems = [
   { key: "overview", label: "Overview", icon: "tachometer-alt" },
-  { key: "users", label: "Manage Users", icon: "users" },
-  { key: "product", label: "Manage Product", icon: "box" },
-  { key: "product-category", label: "Manage Product Category", icon: "tags" },
+  { key: "users", label: "Users", icon: "users" },
+  { key: "product", label: "Product", icon: "box" },
+  { key: "product-category", label: "Product Category", icon: "tags" },
   { key: "reports", label: "Reports", icon: "file-alt" },
   { key: "settings", label: "Settings", icon: "cog" },
 ];
@@ -49,7 +49,7 @@ const AdminDashboard: React.FC = () => {
       <MDBContainer fluid className="flex-grow-1 py-4">
         <MDBRow>
           {/* Sidebar */}
-          <MDBCol md={collapsed ? "1" : "3"} className="mb-4">
+          <MDBCol md={collapsed ? "1" : "2"} className="mb-4">
             <MDBCard className="shadow-sm h-100">
               <MDBCardBody className="p-2">
                 <div className="d-flex justify-content-between align-items-center mb-3">
@@ -83,7 +83,7 @@ const AdminDashboard: React.FC = () => {
           </MDBCol>
 
           {/* Content Area */}
-          <MDBCol md={collapsed ? "11" : "9"}>
+          <MDBCol md={collapsed ? "11" : "10"}>
             <MDBCard className="shadow-sm h-100">
               <MDBCardBody>
                 {activeSection === "overview" && (

@@ -4,6 +4,7 @@ import com.chickfish.products.dto.ApiResponse;
 import com.chickfish.products.model.ProductCategory;
 import com.chickfish.products.service.ProductCategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -12,10 +13,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/product-categories")
-@RequiredArgsConstructor
 public class ProductCategoryController {
 
     private final ProductCategoryService service;
+
+    @Autowired
+    public ProductCategoryController(ProductCategoryService service) {
+        this.service = service;
+    }
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")

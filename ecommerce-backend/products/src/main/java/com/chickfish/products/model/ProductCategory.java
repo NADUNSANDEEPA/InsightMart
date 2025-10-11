@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Builder
 public class ProductCategory {
+    
     @Id
     private String id;
 

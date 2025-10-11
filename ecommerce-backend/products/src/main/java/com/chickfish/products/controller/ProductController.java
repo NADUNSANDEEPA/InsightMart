@@ -3,7 +3,7 @@ package com.chickfish.products.controller;
 import com.chickfish.products.dto.ApiResponse;
 import com.chickfish.products.model.Product;
 import com.chickfish.products.service.ProductService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,10 +11,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
-@RequiredArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
+
+    @Autowired
+    public ProductController(ProductService productService){
+        this.productService = productService;
+    }
 
     @PostMapping("/create")
     public ResponseEntity<ApiResponse<Product>> createProduct(@RequestBody Product product) {

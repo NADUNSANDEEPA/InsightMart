@@ -2,9 +2,12 @@ package com.chickfish.products.controller;
 
 import com.chickfish.products.dto.ApiResponse;
 import com.chickfish.products.model.Product;
+import com.chickfish.products.model.ProductCategory;
 import com.chickfish.products.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,11 +19,12 @@ public class ProductController {
     private final ProductService productService;
 
     @Autowired
-    public ProductController(ProductService productService){
+    public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Product>> createProduct(@RequestBody Product product) {
         Product created = productService.createProduct(product);
         return ResponseEntity.ok(ApiResponse.<Product>builder()
@@ -31,6 +35,7 @@ public class ProductController {
     }
 
     @GetMapping("/get-all")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER') or hasRole('NEWVISITOR')")
     public ResponseEntity<ApiResponse<List<Product>>> getAllProducts() {
         List<Product> products = productService.getAllProducts();
         return ResponseEntity.ok(ApiResponse.<List<Product>>builder()
@@ -41,6 +46,7 @@ public class ProductController {
     }
 
     @GetMapping("/get-by-id/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponse<Product>> getProductById(@PathVariable String id) {
         Product product = productService.getProductById(id);
         return ResponseEntity.ok(ApiResponse.<Product>builder()
@@ -51,6 +57,7 @@ public class ProductController {
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Product>> updateProduct(@PathVariable String id,
                                                               @RequestBody Product product) {
         Product updated = productService.updateProduct(id, product);
@@ -62,11 +69,27 @@ public class ProductController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Void>> deleteProduct(@PathVariable String id) {
         productService.deleteProduct(id);
         return ResponseEntity.ok(ApiResponse.<Void>builder()
                 .success(true)
                 .message("Product deleted successfully.")
                 .build());
+    }
+
+    @GetMapping("/get-products-for-category/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER') or hasRole('NEWVISITOR')")
+    public ResponseEntity<List<Product>> getProductsForCategory(@PathVariable("id") String category) {
+        try {
+            List<Product> products = productService.getProductsByCategory(category);
+            if (products.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.ok(products);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
+        }
     }
 }

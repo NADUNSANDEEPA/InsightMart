@@ -23,24 +23,28 @@ const Login: React.FC = () => {
     const navigate = useNavigate();
 
     const handleLogin = async () => {
-        console.log("Call Service");
 
         try {
-            const res = await AuthService.login("admin", "admin");
-
-            console.log("✅ Token:", res.data.token);
+            const res = await AuthService.login(username, password);
             await Swal.fire({
                 icon: "success",
                 title: "Login Successful!",
-                text: `Welcome back, ${res.data.username}!`,
+                text: `Welcome back!`,
                 timer: 2000,
                 showConfirmButton: false,
             });
             localStorage.setItem("token", res.data.token);
-            navigate("/admin-dashboard");
+            const decodedToken = JSON.parse(atob(res.data.token.split('.')[1]));
 
+            if (decodedToken.role === "ADMIN") {
+                console.log("User log as the admin");
+                navigate("/admin-dashboard");
+            } else {
+                console.log("User log as the client");
+                navigate("/product-list");
+            }
         } catch (error: any) {
-            console.error("❌ Login failed:", error.message);
+            console.error("Login failed:", error.message);
             await Swal.fire({
                 icon: "error",
                 title: "Login Failed",

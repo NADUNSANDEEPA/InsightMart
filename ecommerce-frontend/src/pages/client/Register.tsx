@@ -12,24 +12,29 @@ import {
 } from "mdb-react-ui-kit";
 import NormalBtn from "../../components/Button/NormalBtn";
 import bgImage from '../../assets/bg-img-reg.jpg';
+import type { TokenInitializeRequest } from "../../interface/TokenInitializeRequest";
+import { AuthService } from "../../services/AuthService";
+import type { Customer } from "../../interface/Customer";
+import { CustomerService } from "../../services/CustomerService";
+import Swal from "sweetalert2";
 
 const Register: React.FC = () => {
   const [step, setStep] = useState(1);
 
   // Step 1 states
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [telephone, setTelephone] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [fullName, setFullName] = useState("Nadun Sathsara");
+  const [email, setEmail] = useState("sathsaran@gmail.com");
+  const [telephone, setTelephone] = useState("0711044609");
+  const [password, setPassword] = useState("Nadun1459@");
+  const [confirmPassword, setConfirmPassword] = useState("Nadun1459@");
 
   // Step 2 states
-  const [address, setAddress] = useState("");
-  const [province, setProvince] = useState("");
-  const [city, setCity] = useState("");
-  const [familySize, setFamilySize] = useState("");
-  const [religion, setReligion] = useState("");
-  const [allergies, setAllergies] = useState("");
+  const [address, setAddress] = useState("Horana");
+  const [province, setProvince] = useState("Western");
+  const [city, setCity] = useState("Delgoda");
+  const [familySize, setFamilySize] = useState("2");
+  const [religion, setReligion] = useState("ISLAM");
+  const [allergies, setAllergies] = useState("Yes");
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
@@ -73,31 +78,72 @@ const Register: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (step === 1 && !validateStep1()) return;
     if (step === 2 && !validateStep2()) return;
 
-    console.log("Full Name:", fullName);
-    console.log("Email:", email);
-    console.log("Telephone:", telephone);
-    console.log("Password:", password);
-    console.log("Confirm Password:", confirmPassword);
-    console.log("Address:", address);
-    console.log("Province:", province);
-    console.log("City:", city);
-    console.log("Family Size:", familySize);
-    console.log("Religion:", religion);
-    console.log("Allergies:", allergies);
+    const visitorToken = localStorage.getItem("token");
+    if (!visitorToken) {
+      Swal.fire({
+        icon: "error",
+        title: "Registration Failed",
+        text: "Visitor token not found",
+      });
+      return;
+    }
 
-    
-  };
+    try {
+      const request: Customer = {
+        fullName,
+        email,
+        phone: telephone,
+        password,
+        address,
+        city,
+        province,
+        customerType: "NORMAL",
+        familySize: parseInt(familySize),
+        isThereAllergic: allergies,
+        religion,
+      };
+
+      const authResponse = await AuthService.authUserReg({
+        username: email || "",
+        password: password || "",
+        role: "CUSTOMER",
+      });
+
+      if (!authResponse || !authResponse.success) {
+        throw new Error("Authentication user registration failed");
+      } else {
+        const customerResponse = await CustomerService.create(request);
+        console.log("Customer registered successfully:", customerResponse);
+        Swal.fire({
+          icon: "success",
+          title: "Registration Successful!",
+          text: "Customer has been registered successfully.",
+          confirmButtonColor: "#3085d6",
+        });
+      }
+    } catch (err: any) {
+      console.error("Registration failed:", err);
+      Swal.fire({
+        icon: "error",
+        title: "Registration Failed",
+        text:
+          err?.response?.data?.message ||
+          "Something went wrong while registering the customer.",
+        confirmButtonColor: "#d33",
+      });
+    }
+  }
 
   const handleNext = () => {
-    //  if (validateStep1()) {
-    setStep(2);
-    //}
+    if (validateStep1()) {
+      setStep(2);
+    }
   };
 
   const handleBack = () => {
@@ -312,12 +358,11 @@ const Register: React.FC = () => {
                             style={{ fontSize: "14px" }}
                           >
                             <option value="">Select Religion</option>
-                            <option value="Buddhism">Buddhism</option>
-                            <option value="Hinduism">Hinduism</option>
-                            <option value="Islam">Islam</option>
-                            <option value="Christianity">Christianity</option>
-                            <option value="Roman Catholicism">Roman Catholicism</option>
-                            <option value="Other">Other</option>
+                            <option value="BUDDHIST">Buddhism</option>
+                            <option value="HINDU">Hinduism</option>
+                            <option value="ISLAM">Islam</option>
+                            <option value="CHRISTIAN">Christianity</option>
+                            <option value="OTHER">Other</option>
                           </select>
 
                           {errors.religion && (
@@ -379,7 +424,7 @@ const Register: React.FC = () => {
                             icon="user"
                             type="submit"
                             rounded
-                            outline={false} // <-- ensures filled button
+                            outline={false}
                           />
 
                         </div>
@@ -408,3 +453,4 @@ const Register: React.FC = () => {
 };
 
 export default Register;
+

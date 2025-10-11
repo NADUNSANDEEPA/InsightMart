@@ -54,4 +54,14 @@ export const ProductService = {
       throw error;
     }
   },
+
+  getByCategory: async (categoryId: string) => {
+    try {
+      const response = await apiClient.get(`/api/products/get-products-for-category/${categoryId}`);
+      return response.data;
+    } catch (error: unknown) {
+      handleApiError(error as AxiosError);
+      throw error;
+    }
+  },
 };

@@ -5,6 +5,7 @@ import com.chickfish.products.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -41,5 +42,12 @@ public class ProductService {
     public void deleteProduct(String id) {
         Product existing = getProductById(id);
         productRepository.delete(existing);
+    }
+
+    public List<Product> getProductsByCategory(String categoryId) {
+        if (categoryId == null || categoryId.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return productRepository.findByProductCategory_Id(categoryId);
     }
 }

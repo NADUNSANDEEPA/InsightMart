@@ -1,8 +1,10 @@
 package com.chickfish.auth.service;
 
 import com.chickfish.auth.dto.*;
+import com.chickfish.auth.entity.TokenInitialize;
 import com.chickfish.auth.entity.User;
 import com.chickfish.auth.enums.UserRoles;
+import com.chickfish.auth.repository.TokenInitializeRepository;
 import com.chickfish.auth.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,6 +14,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -22,13 +26,15 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final TokenInitializeRepository tokenInitializeRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService, TokenInitializeRepository tokenInitializeRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
+        this.tokenInitializeRepository = tokenInitializeRepository;
     }
 
 
@@ -52,7 +58,8 @@ public class UserService {
 
     /**
      * Login user and return JWT token
-    * */
+     *
+     */
     public AuthResponse login(AuthRequest request) {
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -92,28 +99,32 @@ public class UserService {
     }
 
     public AuthResponse visitorReg(TokenInitializeRequest request) {
+        Optional<TokenInitialize> existingToken = tokenInitializeRepository
+                .findByMacAddress(request.getMacAddress());
 
-        String rawPassword = UUID.randomUUID().toString();
+        if (existingToken.isPresent()) {
+            TokenInitialize tokenData = existingToken.get();
+            return AuthResponse.builder()
+                    .token(tokenData.getToken())
+                    .username(tokenData.getMacAddress())
+                    .build();
+        }
 
-        User user = User.builder()
-                .username(request.getMacAddress())
-                .password(passwordEncoder.encode(rawPassword))
-                .role(UserRoles.NEWVISITOR)
+        String jwtToken = jwtService.generateToken(request.getMacAddress(), UserRoles.valueOf("NEWVISITOR"));
+
+        TokenInitialize newToken = TokenInitialize.builder()
+                .id(UUID.randomUUID().toString())
+                .macAddress(request.getMacAddress())
+                .ipAddress(request.getIpAddress())
+                .token(jwtToken)
+                .timestamp(LocalDateTime.now().toString())
                 .build();
 
-        userRepository.save(user);
-
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getMacAddress(), rawPassword)
-        );
-
-        User authUser = (User) authentication.getPrincipal();
-
-        String token = jwtService.generateToken(authUser.getUsername(), authUser.getRole());
+        tokenInitializeRepository.save(newToken);
 
         return AuthResponse.builder()
-                .token(token)
-                .username(authUser.getUsername())
+                .token(jwtToken)
+                .username(request.getMacAddress())
                 .build();
     }
 }

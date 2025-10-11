@@ -23,7 +23,7 @@ public class ProductCategoryController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<ProductCategory>> create(@RequestBody ProductCategory category) {
         ProductCategory created = service.createProductCategory(category);
         return ResponseEntity.ok(ApiResponse.<ProductCategory>builder()
@@ -34,7 +34,7 @@ public class ProductCategoryController {
     }
 
     @GetMapping("/get-all")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER') or hasRole('NEWVISITOR')")
     public ResponseEntity<ApiResponse<List<ProductCategory>>> getAll() {
         List<ProductCategory> categories = service.getAll();
         return ResponseEntity.ok(ApiResponse.<List<ProductCategory>>builder()

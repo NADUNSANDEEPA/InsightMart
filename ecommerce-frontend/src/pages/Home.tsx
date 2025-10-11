@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   MDBContainer,
   MDBRow,
@@ -15,22 +15,26 @@ import Navbar from "../components/NavBar/NavBar";
 import Footer from "../components/Footer/Footer";
 import SectionTitle from "../components/Title/SectionTitle";
 
-// Category images
 import FreshMeat from '../assets/itemcategories/fresh-meat.jpg';
 import FreshFish from '../assets/itemcategories/fresh-fish.jpg';
 import ProcessedMeat from '../assets/itemcategories/processed-meat.jpg';
 import Seafood from '../assets/itemcategories/seafood.jpg';
 import Spices from '../assets/itemcategories/meat-spices.jpg';
 import ProductCatalog from "../components/ProductCatelog/ProductCatalog";
+import type { TokenInitializeRequest } from "../interface/TokenInitializeRequest";
+import { AuthService } from "../services/AuthService";
+import { ProductCategoryService } from "../services/ProductCategoryService";
+import type { ProductCategory } from "../interface/ProductCategory";
+import type { Product } from "../interface/Product";
 
-type Product = {
+type LocalProduct = {
   img: string;
   title: string;
   price: string;
   desc?: string;
 };
 
-const products: Product[] = [
+const localProducts: LocalProduct[] = [
   { img: "https://images.unsplash.com/photo-1604908177225-b4c3f7a2c72a", title: "Fresh Salmon", price: "Rs. 1,200 / 500g", desc: "Rich in Omega-3 fatty acids" },
   { img: "https://images.unsplash.com/photo-1506807803488-8eafc15316c9", title: "Chicken Thighs", price: "Rs. 800 / kg", desc: "Tender and juicy" },
   { img: "https://images.unsplash.com/photo-1572441710534-680f8e88a8c1", title: "Beef Mince", price: "Rs. 1,100 / kg", desc: "Premium quality beef" },
@@ -43,13 +47,55 @@ const products: Product[] = [
   { img: "https://images.unsplash.com/photo-1587202372775-98926bbd4c74", title: "Crab Meat", price: "Rs. 2,200 / 500g", desc: "Sweet and tender" },
 ];
 
-// Utility to chunk products array for carousel slides
 const chunkArray = <T,>(arr: T[], size: number): T[][] =>
   arr.reduce<T[][]>((acc, _, i) => (i % size === 0 ? [...acc, arr.slice(i, i + size)] : acc), []);
-
-const productChunks = chunkArray(products, 5);
+const productChunks = chunkArray(localProducts, 5);
 
 const Home: React.FC = () => {
+  const [productCategories, setProductCategories] = useState<ProductCategory[]>([]);
+
+
+  useEffect(() => {
+    const initialize = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        await initializeVisitor();
+      } else {
+        localStorage.removeItem("token");
+        await initializeVisitor();
+      }
+    };
+    initialize();
+  }, []);
+
+  async function initializeVisitor() {
+    const request: TokenInitializeRequest = {
+      id: Math.floor(Math.random() * 1000000).toString(),
+      ipAddress: await AuthService.getPublicIP(),
+      macAddress: await AuthService.getDeviceId(),
+      timestamp: new Date().toISOString(),
+    };
+
+    AuthService.visitorReg(request)
+      .then(res => {
+        localStorage.setItem("token", res.data.token);
+        fetchCategories();
+      })
+      .catch(err => console.error("Registration failed", err));
+  }
+
+  const fetchCategories = async () => {
+    try {
+      const res = await ProductCategoryService.getAll();
+      setProductCategories(res.data || []);
+
+      console.log(res);
+
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
   return (
     <div>
       <div style={{
@@ -86,12 +132,12 @@ const Home: React.FC = () => {
                   <span style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 900, fontSize: "4.9rem" }}>Premium Fresh Fish & Meat.</span>
                   <br />
                   <hr style={{ width: '80%' }} />
-                  <span style={{ fontWeight: 600, fontSize: "0.9rem", textTransform: 'uppercase', fontFamily: "'Roboto', sans-serif'", letterSpacing: '9px', color:'rgba(186, 186, 154, 1)' }}>Delivered To Your Doorstep</span>
+                  <span style={{ fontWeight: 600, fontSize: "0.9rem", textTransform: "uppercase", fontFamily: "'Roboto', sans-serif'", letterSpacing: '9px', color: 'rgba(186, 186, 154, 1)' }}>Delivered To Your Doorstep</span>
                 </h2>
               </section>
             </MDBCol>
             <MDBCol size="12" md="5" className="d-flex justify-content-center">
-              <ProductCatalog />
+              <ProductCatalog productCategories={productCategories} />
             </MDBCol>
           </MDBRow>
         </MDBContainer>

@@ -12,13 +12,15 @@ import {
 import Logo from '../../assets/logo.ico';
 import GlassEffectButton from "../Button/GlassEffectButton";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import { decode } from "punycode";
 
 interface NavbarProps {
-  isBgColor?: boolean;        
-  bgColor?: string;            
-  bgGradient?: string;          
-  bgImage?: string;             
-  overlayColor?: string;        
+  isBgColor?: boolean;
+  bgColor?: string;
+  bgGradient?: string;
+  bgImage?: string;
+  overlayColor?: string;
 }
 
 const linkStyle = {
@@ -77,8 +79,35 @@ const Navbar = ({
       backgroundStyle = "linear-gradient(135deg, #470b0bff, #000000ff)";
     }
   } else if (scrolled) {
-    backgroundStyle = "#4904041e"; // semi-transparent on scroll
+    backgroundStyle = "#4904041e";
   }
+
+  const storedUser = localStorage.getItem("token");
+  const user = storedUser ? JSON.parse(atob(storedUser.split('.')[1])) : null;
+
+  function logoutHandler() {
+    Swal.fire({
+      title: 'Are you sure you want to logout?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, logout!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("token");
+        Swal.fire(
+          'Logged Out!',
+          'You have been logged out successfully.',
+          'success'
+        ).then(() => {
+          navigate('/login');
+          window.location.reload();
+        });
+      }
+    });
+  }
+
 
   return (
     <MDBNavbar
@@ -148,15 +177,29 @@ const Navbar = ({
             icon="shopping-cart"
             onClick={() => alert("Clicked!")}
           />
-          <GlassEffectButton
-            text="My Account"
-            borderSize="0px"
-            shadow="0 4px 10px rgba(50, 70, 56, 0.4)"
-            borderRadius="8px"
-            padding="0.8rem 1.5rem"
-            icon="user"
-            onClick={() => navigate('/login')}
-          />
+
+          {user && user.role !== "NEWVISITOR" ? (
+            <GlassEffectButton
+              text="Logout"
+              borderSize="0px"
+              shadow="0 4px 10px rgba(50, 70, 56, 0.4)"
+              borderRadius="8px"
+              padding="0.8rem 1.5rem"
+              icon="user"
+              onClick={logoutHandler}
+            />
+          ) : (
+            <GlassEffectButton
+              text="My Account"
+              borderSize="0px"
+              shadow="0 4px 10px rgba(50, 70, 56, 0.4)"
+              borderRadius="8px"
+              padding="0.8rem 1.5rem"
+              icon="sign-in-alt"
+              onClick={() => navigate('/login')}
+            />
+          )}
+
         </div>
       </MDBContainer>
     </MDBNavbar>

@@ -1,0 +1,63 @@
+[
+  { "product_code": "M1001", "allergic_available": false },
+  { "product_code": "M1002", "allergic_available": false },
+  { "product_code": "M1003", "allergic_available": false },
+  { "product_code": "M1004", "allergic_available": false },
+  { "product_code": "M1005", "allergic_available": false },
+
+  { "product_code": "M1101", "allergic_available": false },
+  { "product_code": "M1102", "allergic_available": false },
+  { "product_code": "M1103", "allergic_available": false },
+  { "product_code": "M1104", "allergic_available": false },
+  { "product_code": "M1105", "allergic_available": false },
+
+  { "product_code": "M1201", "allergic_available": false },
+  { "product_code": "M1202", "allergic_available": false },
+  { "product_code": "M1203", "allergic_available": false },
+  { "product_code": "M1204", "allergic_available": false },
+  { "product_code": "M1205", "allergic_available": false },
+
+  { "product_code": "M1301", "allergic_available": false },
+  { "product_code": "M1302", "allergic_available": false },
+  { "product_code": "M1303", "allergic_available": false },
+  { "product_code": "M1304", "allergic_available": false },
+
+  { "product_code": "M1401", "allergic_available": false },
+  { "product_code": "M1402", "allergic_available": false },
+  { "product_code": "M1403", "allergic_available": false },
+  { "product_code": "M1404", "allergic_available": false },
+  { "product_code": "M1405", "allergic_available": false },
+
+  { "product_code": "S1001", "allergic_available": true },
+  { "product_code": "S1002", "allergic_available": true },
+  { "product_code": "S1003", "allergic_available": true },
+  { "product_code": "S1004", "allergic_available": true },
+  { "product_code": "S1005", "allergic_available": true },
+  { "product_code": "S1006", "allergic_available": true },
+
+  { "product_code": "S1101", "allergic_available": true },
+  { "product_code": "S1102", "allergic_available": true },
+  { "product_code": "S1103", "allergic_available": true },
+  { "product_code": "S1104", "allergic_available": true },
+  { "product_code": "S1105", "allergic_available": true },
+  { "product_code": "S1106", "allergic_available": true },
+
+  { "product_code": "S1201", "allergic_available": true },
+  { "product_code": "S1202", "allergic_available": true },
+  { "product_code": "S1203", "allergic_available": true },
+  { "product_code": "S1204", "allergic_available": true },
+  { "product_code": "S1205", "allergic_available": true },
+  { "product_code": "S1206", "allergic_available": true },
+
+  { "product_code": "R1001", "allergic_available": false },
+  { "product_code": "R1002", "allergic_available": true },
+  { "product_code": "R1003", "allergic_available": false },
+
+  { "product_code": "F1001", "allergic_available": false },
+  { "product_code": "F1002", "allergic_available": true },
+  { "product_code": "F1003", "allergic_available": true },
+
+  { "product_code": "V1001", "allergic_available": false },
+  { "product_code": "V1002", "allergic_available": false },
+  { "product_code": "V1003", "allergic_available": true }
+]

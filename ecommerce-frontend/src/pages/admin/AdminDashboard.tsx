@@ -16,6 +16,7 @@ import Footer from "../../components/AdminLayout/Footer/Footer";
 import Navbar from "../../components/AdminLayout/NavBar/NavBar";
 import Product from "./panels/Product";
 import ProductCategoryPanel from "./panels/ProductCategoryPanel";
+import UserPanel from "./panels/User";
 
 
 const menuItems = [
@@ -92,14 +93,9 @@ const AdminDashboard: React.FC = () => {
                     <p>Here you can see a summary of system stats.</p>
                   </>
                 )}
-                {activeSection === "users" && (
-                  <>
-                    <MDBCardTitle>Manage Users</MDBCardTitle>
-                    <p>Admin can add, edit, or remove users.</p>
-                  </>
-                )}
-                {activeSection === "product" && <Product />}
+                {activeSection === "users" && <UserPanel />}
                 {activeSection === "product-category" && <ProductCategoryPanel />}
+                {activeSection === "product" && <Product />}
                 {activeSection === "reports" && (
                   <>
                     <MDBCardTitle>Reports</MDBCardTitle>

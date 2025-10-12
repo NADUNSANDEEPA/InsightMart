@@ -20,4 +20,7 @@ public class ProductCategory {
     private String categoryName;
     private String subCategoryName;
     private String description;
+
+    @Builder.Default
+    private boolean active = true;
 }

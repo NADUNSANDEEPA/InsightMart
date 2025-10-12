@@ -37,7 +37,7 @@ const ProductCategoryPanel: React.FC = () => {
   const fetchCategories = async () => {
     setLoading(true);
     try {
-      const res = await ProductCategoryService.getAll();
+      const res = await ProductCategoryService.getAll("1");
       setCategories(res.data || []);
       setCurrentPage(1);
     } catch (error) {
@@ -66,6 +66,7 @@ const ProductCategoryPanel: React.FC = () => {
       categoryName: formData.category,
       subCategoryName: formData.subCategory,
       description: formData.description,
+      active: true
     };
 
     try {
@@ -100,28 +101,6 @@ const ProductCategoryPanel: React.FC = () => {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "This action cannot be undone!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!",
-    });
-
-    if (result.isConfirmed) {
-      try {
-        await ProductCategoryService.delete(id);
-        Swal.fire("Deleted!", "Category has been deleted.", "success");
-        fetchCategories();
-      } catch (error: any) {
-        Swal.fire("Error", error.message || "Failed to delete category.", "error");
-      }
-    }
-  };
-
   const handleEdit = (cat: ProductCategory) => {
     setFormData({
       id: cat.id,
@@ -131,84 +110,117 @@ const ProductCategoryPanel: React.FC = () => {
     });
   };
 
+  function handleToggleActiveProduct(row: ProductCategory): void {
+    Swal.fire({
+      title: `Are you sure you want to ${row.active ? 'deactivate' : 'activate'} this category?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        ProductCategoryService.activateDeactivate(row.id)
+          .then(() => {
+            Swal.fire({
+              title: 'Updated!',
+              text: `Category has been ${row.active ? 'deactivated' : 'activated'}.`,
+              icon: 'success',
+            }).then(() => fetchCategories());
+          })
+          .catch((error) => {
+            console.error("Error updating category status:", error);
+            Swal.fire({
+              title: 'Error!',
+              text: 'There was an error updating the category.',
+              icon: 'error',
+            });
+          });
+      }
+    });
+  }
+
   return (
-    <div className="p-4">
-      <MDBRow>
-        <MDBCol md="8">
-          <MDBCard className="border shadow-0 mb-4">
-            <MDBCardBody>
-              <MDBCardTitle>Product Category List</MDBCardTitle>
-              {loading ? (
-                <div className="text-center my-5">
-                  <MDBSpinner role="status">
-                    <span className="visually-hidden">Loading...</span>
-                  </MDBSpinner>
-                </div>
-              ) : (
-                <PaginatedTable
-                  columns={[
-                    { label: "Product Category", field: "categoryName" },
-                    { label: "Product Sub Category", field: "subCategoryName" },
-                  ]}
-                  data={categories}
-                  currentPage={currentPage}
-                  rowsPerPage={rowsPerPage}
-                  onPageChange={setCurrentPage}
-                  onEdit={handleEdit}
-                  onDelete={handleDelete}
+    <>
+      <MDBCardTitle className="mb-0">Product Category Management</MDBCardTitle>
+      <div className="p-4">
+        <MDBRow>
+          <MDBCol md="8">
+            <MDBCard className="border shadow-0 mb-4 h-100">
+              <MDBCardBody>
+                <MDBCardTitle>Product Category List</MDBCardTitle>
+                {loading ? (
+                  <div className="text-center my-5">
+                    <MDBSpinner role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </MDBSpinner>
+                  </div>
+                ) : (
+                  <PaginatedTable
+                    columns={[
+                      { label: "Product Category", field: "categoryName" },
+                      { label: "Product Sub Category", field: "subCategoryName" },
+                      { label: "Active / Inactive", field: "active", booleanDisplay: true },
+                    ]}
+                    data={categories}
+                    currentPage={currentPage}
+                    rowsPerPage={rowsPerPage}
+                    onPageChange={setCurrentPage}
+                    onEdit={handleEdit}
+                    onToggleActive={handleToggleActiveProduct}
+                  />
+                )}
+              </MDBCardBody>
+            </MDBCard>
+          </MDBCol>
+
+          <MDBCol md="4">
+            <MDBCard className="border shadow-0 mb-4 h-100">
+              <MDBCardBody>
+                <MDBCardTitle className="mb-4">
+                  {formData.id ? "Edit Category" : "Add Category"}
+                </MDBCardTitle>
+
+                <label className="form-label">Product Category</label>
+                <select
+                  className="form-select mb-4"
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                >
+                  <option value="">-- Select Category --</option>
+                  <option value="Sea Foods">Sea Foods</option>
+                  <option value="Meat">Meat</option>
+                </select>
+
+                <label className="form-label">Product Sub Category</label>
+                <MDBInput
+                  name="subCategory"
+                  value={formData.subCategory}
+                  onChange={handleChange}
+                  className="mb-4"
+                  placeholder="Enter sub-category name"
                 />
-              )}
-            </MDBCardBody>
-          </MDBCard>
-        </MDBCol>
 
-        <MDBCol md="4">
-          <MDBCard className="border shadow-0 mb-4">
-            <MDBCardBody>
-              <MDBCardTitle className="mb-4">
-                {formData.id ? "Edit Category" : "Add Category"}
-              </MDBCardTitle>
+                <label className="form-label">Description</label>
+                <textarea
+                  rows={5}
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  className="form-control mb-3"
+                  placeholder="Add optional description..."
+                />
 
-              <label className="form-label">Product Category</label>
-              <select
-                className="form-select mb-4"
-                name="category"
-                value={formData.category}
-                onChange={handleChange}
-              >
-                <option value="">-- Select Category --</option>
-                <option value="Sea Foods">Sea Foods</option>
-                <option value="Meat">Meat</option>
-              </select>
-
-              <label className="form-label">Product Sub Category</label>
-              <MDBInput
-                name="subCategory"
-                value={formData.subCategory}
-                onChange={handleChange}
-                className="mb-4"
-                placeholder="Enter sub-category name"
-              />
-
-              <label className="form-label">Description</label>
-              <textarea
-                rows={5}
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                className="form-control mb-3"
-                placeholder="Add optional description..."
-              />
-
-              <MDBBtn color="dark" className="shadow-0 w-100" onClick={handleAddOrEdit}>
-                <MDBIcon fas icon={formData.id ? "edit" : "plus"} className="me-2" />
-                {formData.id ? "Save Changes" : "Add Category"}
-              </MDBBtn>
-            </MDBCardBody>
-          </MDBCard>
-        </MDBCol>
-      </MDBRow>
-    </div>
+                <MDBBtn color="dark" className="shadow-0 w-100" onClick={handleAddOrEdit}>
+                  <MDBIcon fas icon={formData.id ? "edit" : "plus"} className="me-2" />
+                  {formData.id ? "Save Changes" : "Add Category"}
+                </MDBBtn>
+              </MDBCardBody>
+            </MDBCard>
+          </MDBCol>
+        </MDBRow>
+      </div>
+    </>
   );
 };
 

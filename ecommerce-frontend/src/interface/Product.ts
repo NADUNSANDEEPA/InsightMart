@@ -8,4 +8,5 @@ export interface Product {
     currentPrice: number;
     currentStock: number;
     productCategory: ProductCategory;
+    active: boolean;
 }

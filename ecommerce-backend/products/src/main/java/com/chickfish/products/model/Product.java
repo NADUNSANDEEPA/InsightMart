@@ -26,4 +26,6 @@ public class Product {
     @DBRef
     private ProductCategory productCategory;
 
+    @Builder.Default
+    private boolean active = true;
 }

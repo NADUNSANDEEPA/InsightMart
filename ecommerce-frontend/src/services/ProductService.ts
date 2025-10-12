@@ -15,9 +15,9 @@ export const ProductService = {
     }
   },
 
-  getAll: async () => {
+  getAll: async (type : string) => {
     try {
-      const response = await apiClient.get("/api/products/get-all");
+      const response = await apiClient.get(`/api/products/get-all/${type}`);
       return response.data;
     } catch (error: unknown) {
       handleApiError(error as AxiosError);
@@ -64,4 +64,15 @@ export const ProductService = {
       throw error;
     }
   },
+
+   productActivateDeactivate: async (id: string) => {
+    try {
+      const response = await apiClient.put(`/api/products/activate-deactivate/${id}`);
+      return response.data;
+    } catch (error: unknown) {
+      handleApiError(error as AxiosError);
+      throw error;
+    }
+  },
+
 };

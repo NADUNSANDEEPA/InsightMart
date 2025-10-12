@@ -14,9 +14,9 @@ export const ProductCategoryService = {
     }
   },
 
-  getAll: async () => {
+  getAll: async (type: string) => {
     try {
-      const response = await apiClient.get("/api/product-categories/get-all");
+      const response = await apiClient.get(`/api/product-categories/get-all/${type}`);
       return response.data;
     } catch (error: unknown) {
       handleApiError(error as AxiosError);
@@ -46,6 +46,16 @@ export const ProductCategoryService = {
       const response = await apiClient.delete(`/api/product-categories/delete/${id}`);
       return response.data;
     } catch (error: unknown) {
+      handleApiError(error as AxiosError);
+    }
+  },
+
+  activateDeactivate: async (id: string) => {
+    try {
+      const response = await apiClient.put(`/api/product-categories/activate-deactivate/${id}`);
+      return response.data;
+    }
+    catch (error: unknown) {
       handleApiError(error as AxiosError);
     }
   },

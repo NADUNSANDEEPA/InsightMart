@@ -12,14 +12,15 @@ import {
 } from "mdb-react-ui-kit";
 import NormalBtn from "../../components/Button/NormalBtn";
 import bgImage from '../../assets/bg-img-reg.jpg';
-import type { TokenInitializeRequest } from "../../interface/TokenInitializeRequest";
 import { AuthService } from "../../services/AuthService";
 import type { Customer } from "../../interface/Customer";
 import { CustomerService } from "../../services/CustomerService";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const Register: React.FC = () => {
   const [step, setStep] = useState(1);
+  const navigate = useNavigate();
 
   // Step 1 states
   const [fullName, setFullName] = useState("Nadun Sathsara");
@@ -95,7 +96,7 @@ const Register: React.FC = () => {
     }
 
     try {
-      const request: Customer = {
+      const custRequest: Customer = {
         fullName,
         email,
         phone: telephone,
@@ -107,6 +108,7 @@ const Register: React.FC = () => {
         familySize: parseInt(familySize),
         isThereAllergic: allergies,
         religion,
+        active: true,
       };
 
       const authResponse = await AuthService.authUserReg({
@@ -118,7 +120,7 @@ const Register: React.FC = () => {
       if (!authResponse || !authResponse.success) {
         throw new Error("Authentication user registration failed");
       } else {
-        const customerResponse = await CustomerService.create(request);
+        const customerResponse = await CustomerService.create(custRequest);
         console.log("Customer registered successfully:", customerResponse);
         Swal.fire({
           icon: "success",
@@ -126,6 +128,7 @@ const Register: React.FC = () => {
           text: "Customer has been registered successfully.",
           confirmButtonColor: "#3085d6",
         });
+        navigate("/login");
       }
     } catch (err: any) {
       console.error("Registration failed:", err);

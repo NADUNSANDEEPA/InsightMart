@@ -30,4 +30,6 @@ public class Customer {
     private String isThereAllergic;
     private Religion religion;
 
+    @Builder.Default
+    private boolean active = true;
 }

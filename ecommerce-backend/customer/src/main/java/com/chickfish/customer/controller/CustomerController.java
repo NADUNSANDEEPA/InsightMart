@@ -4,6 +4,7 @@ import com.chickfish.customer.dto.ApiResponse;
 import com.chickfish.customer.model.Customer;
 import com.chickfish.customer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -67,6 +68,25 @@ public class CustomerController {
         return ResponseEntity.ok(ApiResponse.<Void>builder()
                 .success(true)
                 .message("Customer deleted successfully")
+                .build());
+    }
+
+    @PutMapping("/user-activate-deactivate/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<Void>> updateActivateDeactivate(@PathVariable String id ) {
+        boolean updated = customerService.updateActivateDeactivate(id);
+
+        if (!updated) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ApiResponse.<Void>builder()
+                            .success(false)
+                            .message("Customer not found")
+                            .build());
+        }
+
+        return ResponseEntity.ok(ApiResponse.<Void>builder()
+                .success(true)
+                .message("Customer status updated successfully")
                 .build());
     }
 }

@@ -11,95 +11,100 @@ import {
 
 interface TableColumn {
     label: string;
-    field: string; 
+    field: string;
+    booleanDisplay?: boolean;
 }
 
-interface PaginatedTableProps<T extends { id: string }> {
+interface PaginatedTableProps<T extends { id: string; active?: boolean }> {
     columns: TableColumn[];
     data: T[];
     currentPage: number;
     rowsPerPage: number;
     onPageChange: (page: number) => void;
     onEdit?: (row: T) => void;
-    onDelete?: (id: string) => void;
+    onToggleActive?: (row: T) => void;
 }
 
-const PaginatedTable = <T extends { id: string }>({
+const PaginatedTable = <T extends { id: string; active?: boolean }>({
     columns,
     data,
     currentPage,
     rowsPerPage,
     onPageChange,
     onEdit,
-    onDelete,
+    onToggleActive,
 }: PaginatedTableProps<T>) => {
     const totalPages = Math.ceil(data.length / rowsPerPage);
     const startIndex = (currentPage - 1) * rowsPerPage;
     const currentData = data.slice(startIndex, startIndex + rowsPerPage);
 
-    // Utility to safely get nested field values
-    const getValue = (obj: any, path: string) => {
-        return path.split(".").reduce((acc, key) => acc?.[key], obj) ?? "";
+    const getValue = (obj: any, col: TableColumn) => {
+        const value = col.field.split(".").reduce((acc, key) => acc?.[key], obj);
+        if (col.booleanDisplay && typeof value === "boolean") return value ? "Active" : "Inactive";
+        return value === undefined || value === null ? "" : value;
     };
 
     return (
         <>
-            <MDBTable hover responsive bordered>
-                <MDBTableHead style={{ backgroundColor: "black" }}>
-                    <tr>
-                        {columns.map((col, index) => (
-                            <th key={index} className="text-white">
-                                {col.label}
-                            </th>
-                        ))}
-                        {(onEdit || onDelete) && <th className="text-white">Action</th>}
-                    </tr>
-                </MDBTableHead>
-
-                <MDBTableBody>
-                    {currentData.length === 0 ? (
+            <div style={{ overflowX: "auto", width: "100%" }}>
+                <MDBTable hover bordered>
+                    <MDBTableHead style={{ backgroundColor: "black" }}>
                         <tr>
-                            <td colSpan={columns.length + 1} className="text-center">
-                                No records found.
-                            </td>
+                            {columns.map((col, index) => (
+                                <th key={index} className="text-white">
+                                    {col.label}
+                                </th>
+                            ))}
+                            {(onEdit || onToggleActive) && <th className="text-white">Action</th>}
                         </tr>
-                    ) : (
-                        currentData.map((row) => (
-                            <tr key={row.id}>
-                                {columns.map((col, i) => (
-                                    <td key={i}>{getValue(row, col.field)}</td>
-                                ))}
+                    </MDBTableHead>
 
-                                {(onEdit || onDelete) && (
-                                    <td>
-                                        {onEdit && (
-                                            <MDBBtn
-                                                size="sm"
-                                                color="warning"
-                                                className="me-2"
-                                                outline
-                                                onClick={() => onEdit(row)}
-                                            >
-                                                <MDBIcon fas icon="edit" />
-                                            </MDBBtn>
-                                        )}
-                                        {onDelete && (
-                                            <MDBBtn
-                                                size="sm"
-                                                color="danger"
-                                                outline
-                                                onClick={() => onDelete(row.id)}
-                                            >
-                                                <MDBIcon fas icon="trash" />
-                                            </MDBBtn>
-                                        )}
-                                    </td>
-                                )}
+                    <MDBTableBody>
+                        {currentData.length === 0 ? (
+                            <tr>
+                                <td colSpan={columns.length + 1} className="text-center">
+                                    No records found.
+                                </td>
                             </tr>
-                        ))
-                    )}
-                </MDBTableBody>
-            </MDBTable>
+                        ) : (
+                            currentData.map((row) => (
+                                <tr key={row.id}>
+                                    {columns.map((col, i) => (
+                                        <td key={i}>{getValue(row, col)}</td>
+                                    ))}
+
+                                    {(onEdit || onToggleActive) && (
+                                        <td>
+                                            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                                                {onEdit && (
+                                                    <MDBBtn
+                                                        size="sm"
+                                                        color="warning"
+                                                        outline
+                                                        onClick={() => onEdit(row)}
+                                                    >
+                                                        <MDBIcon fas icon="edit" />
+                                                    </MDBBtn>
+                                                )}
+                                                {onToggleActive && (
+                                                    <MDBBtn
+                                                        size="sm"
+                                                        color={row.active ? "success" : "secondary"}
+                                                        outline
+                                                        onClick={() => onToggleActive(row)}
+                                                    >
+                                                        {row.active ? "Inactive" : "Active"}
+                                                    </MDBBtn>
+                                                )}
+                                            </div>
+                                        </td>
+                                    )}
+                                </tr>
+                            ))
+                        )}
+                    </MDBTableBody>
+                </MDBTable>
+            </div>
 
             {totalPages > 1 && (
                 <nav className="d-flex justify-content-center mt-3">

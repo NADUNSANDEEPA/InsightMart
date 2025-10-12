@@ -86,7 +86,7 @@ const Home: React.FC = () => {
 
   const fetchCategories = async () => {
     try {
-      const res = await ProductCategoryService.getAll();
+      const res = await ProductCategoryService.getAll("2");
       setProductCategories(res.data || []);
 
       console.log(res);

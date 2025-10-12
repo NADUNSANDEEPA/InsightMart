@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -46,5 +47,17 @@ public class CustomerService {
 
     public void deleteCustomer(String id) {
         customerRepository.deleteById(id);
+    }
+
+    public boolean updateActivateDeactivate(String id) {
+        Optional<Customer> optionalCustomer = customerRepository.findById(id);
+        if (optionalCustomer.isEmpty()) {
+            return false;
+        }
+        Customer customer = optionalCustomer.get();
+        customer.setActive(!customer.isActive());
+
+        customerRepository.save(customer);
+        return true;
     }
 }

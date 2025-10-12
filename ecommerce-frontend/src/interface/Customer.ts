@@ -1,4 +1,5 @@
 export interface Customer {
+  _id?: string;
   fullName: string;
   address: string;
   email: string;
@@ -10,4 +11,5 @@ export interface Customer {
   familySize: number;
   isThereAllergic: string;
   religion: string;
+  active: boolean;
 }

@@ -13,7 +13,6 @@ import Logo from '../../assets/logo.ico';
 import GlassEffectButton from "../Button/GlassEffectButton";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { decode } from "punycode";
 
 interface NavbarProps {
   isBgColor?: boolean;

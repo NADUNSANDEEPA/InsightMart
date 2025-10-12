@@ -3,4 +3,5 @@ export interface ProductCategory {
     subCategoryName: string;
     description: string;
     id: string; 
+    active: boolean;
 }

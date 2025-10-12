@@ -1,0 +1,194 @@
+{
+    "daily_sales_report": {
+        "report_code" : "DSR001",
+        "description": "Generates a summary of sales for a specific day, including top-selling fish items and sales by category.",
+        "parameters_for_report_generate": [
+            "date",
+            "total_sales",
+            "number_of_transactions",
+            "top_selling_items",
+            "sales_by_category",
+            "customer_feedback_summary"
+        ],
+        "user_prompt": [
+            "Please generate a daily sales report",
+            "I want to generate a daily sales report",
+            "Can you create a daily sales report for me?",
+            "Generate a daily sales report",
+            "Create a daily sales report",
+            "Daily sales report"
+        ]
+    },
+
+    "weekly_sales_summary": {
+        "report_code" : "WSR001",
+        "description": "Provides weekly sales performance including total revenue, best-selling products, and category performance.",
+        "parameters_for_report_generate": [
+            "week_start_date",
+            "week_end_date",
+            "total_revenue",
+            "number_of_orders",
+            "top_selling_items",
+            "sales_growth_rate",
+            "refund_summary"
+        ],
+        "user_prompt": [
+            "Generate a weekly sales report",
+            "Show me weekly sales summary",
+            "Create weekly sales report",
+            "I want weekly sales details",
+            "Weekly sales report"
+        ]
+    },
+
+    "monthly_performance_report": {
+        "report_code" : "MPR001",
+        "description": "Summarizes overall business performance for the month including profit margin, new customers, and operational highlights.",
+        "parameters_for_report_generate": [
+            "month",
+            "total_revenue",
+            "profit_margin",
+            "customer_acquisition",
+            "employee_performance_summary",
+            "key_challenges_and_solutions"
+        ],
+        "user_prompt": [
+            "Please generate a monthly performance report",
+            "I want to generate a monthly performance report",
+            "Can you create a monthly performance report for me?",
+            "Generate a monthly performance report",
+            "Create a monthly performance report",
+            "Monthly performance report"
+        ]
+    },
+
+    "inventory_status_report": {
+        "report_code" : "ISR001",
+        "description": "Tracks available fish stock, low-stock alerts, and reorder requirements.",
+        "parameters_for_report_generate": [
+            "date",
+            "current_stock_levels",
+            "low_stock_items",
+            "out_of_stock_items",
+            "reorder_recommendations"
+        ],
+        "user_prompt": [
+            "Generate an inventory report",
+            "Show me stock status",
+            "Create an inventory status report",
+            "I want an inventory report",
+            "Inventory summary"
+        ]
+    },
+
+    "customer_feedback_report": {
+        "report_code" : "CFR001",
+        "description": "Analyzes customer feedback, ratings, and satisfaction trends for a selected time period.",
+        "parameters_for_report_generate": [
+            "time_period",
+            "total_feedback_received",
+            "average_rating",
+            "positive_feedback_summary",
+            "negative_feedback_summary",
+            "action_points"
+        ],
+        "user_prompt": [
+            "Generate a customer feedback report",
+            "Create a feedback summary report",
+            "Show me customer reviews report",
+            "Customer satisfaction report"
+        ]
+    },
+
+    "supplier_performance_report": {
+        "report_code" : "SPR001",
+        "description": "Evaluates suppliers based on delivery time, fish quality, and order fulfillment rates.",
+        "parameters_for_report_generate": [
+            "month",
+            "supplier_name",
+            "delivery_timeliness",
+            "fish_quality_score",
+            "order_accuracy",
+            "issues_reported"
+        ],
+        "user_prompt": [
+            "Generate supplier performance report",
+            "Show me supplier report",
+            "Supplier rating report",
+            "Monthly supplier performance"
+        ]
+    },
+
+    "delivery_performance_report": {
+        "report_code" : "DPR001",
+        "description": "Monitors the efficiency of deliveries, average delivery time, and customer satisfaction with delivery services.",
+        "parameters_for_report_generate": [
+            "time_period",
+            "total_deliveries",
+            "on_time_delivery_rate",
+            "average_delivery_duration",
+            "customer_delivery_feedback"
+        ],
+        "user_prompt": [
+            "Generate a delivery performance report",
+            "Show me delivery summary",
+            "Delivery statistics report",
+            "Delivery efficiency report"
+        ]
+    },
+
+    "revenue_and_profit_report": {
+        "report_code" : "RPR001",
+        "description": "Summarizes total revenue, cost of goods sold, and overall profit margins for a specified period.",
+        "parameters_for_report_generate": [
+            "time_period",
+            "total_revenue",
+            "total_cost",
+            "net_profit",
+            "profit_margin_percentage",
+            "category_wise_profit"
+        ],
+        "user_prompt": [
+            "Generate revenue report",
+            "Show me profit and revenue summary",
+            "Create profit report",
+            "Monthly revenue report"
+        ]
+    },
+
+    "customer_purchase_behavior_report": {
+        "report_code" : "CPBR001",
+        "description": "Analyzes purchasing trends of customers including frequency, order size, and preferred fish types.",
+        "parameters_for_report_generate": [
+            "time_period",
+            "customer_segments",
+            "average_order_value",
+            "most_purchased_items",
+            "repeat_customer_rate"
+        ],
+        "user_prompt": [
+            "Generate customer behavior report",
+            "Show me purchase trends",
+            "Customer buying pattern report",
+            "Customer order frequency report"
+        ]
+    },
+
+    "refund_and_returns_report": {
+        "report_code" : "RRR001",
+        "description": "Tracks all refund and return transactions for quality issues, late delivery, or wrong items.",
+        "parameters_for_report_generate": [
+            "time_period",
+            "total_refunds",
+            "reason_breakdown",
+            "refund_amount_total",
+            "top_returned_items"
+        ],
+        "user_prompt": [
+            "Generate refund report",
+            "Show me returns summary",
+            "Create refund and return report",
+            "Refund statistics report"
+        ]
+    }
+}

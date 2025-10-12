@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Install LightFM and Jupyter
-RUN pip install --no-cache-dir lightfm jupyterlab pandas numpy scipy scikit-learn matplotlib
+RUN pip install --no-cache-dir lightfm jupyterlab pandas numpy scipy scikit-learn matplotlib seaborn
 
 # Expose Jupyter notebook port
 EXPOSE 8888

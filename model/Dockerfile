@@ -1,21 +1,48 @@
-# Use official Python base image
+# ------------------------------
+# Base Image
+# ------------------------------
 FROM python:3.10-slim
 
-# Install system dependencies for LightFM compilation
-RUN apt-get update && apt-get install -y \
+# ------------------------------
+# System Dependencies
+# ------------------------------
+RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     python3-dev \
     libopenblas-dev \
+    libssl-dev \
+    libgomp1 \
+    gcc \
     && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
+# ------------------------------
+# Set Working Directory
+# ------------------------------
 WORKDIR /app
 
-# Install LightFM and Jupyter
-RUN pip install --no-cache-dir lightfm jupyterlab pandas numpy scipy scikit-learn matplotlib seaborn
+# ------------------------------
+# Install Python Dependencies
+# ------------------------------
+RUN pip install --upgrade pip && pip install --no-cache-dir \
+    jupyterlab \
+    pandas \
+    numpy \
+    scipy \
+    scikit-learn \
+    matplotlib \
+    seaborn \
+    joblib \
+    xgboost \
+    pmdarima \
+    prophet \
+    statsmodels
 
-# Expose Jupyter notebook port
+# ------------------------------
+# Expose Ports
+# ------------------------------
 EXPOSE 8888
 
-# Start Jupyter notebook server
-CMD ["jupyter", "lab", "--ip=0.0.0.0", "--allow-root", "--no-browser", "--NotebookApp.token=''", "--NotebookApp.password=''"]
+# ------------------------------
+# Default Command - Launch JupyterLab
+# ------------------------------
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--allow-root", "--no-browser", "--NotebookApp.token=", "--NotebookApp.password="]

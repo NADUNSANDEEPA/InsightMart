@@ -17,7 +17,7 @@ import Navbar from "../../components/AdminLayout/NavBar/NavBar";
 import Product from "./panels/Product";
 import ProductCategoryPanel from "./panels/ProductCategoryPanel";
 import UserPanel from "./panels/User";
-
+import ChatBox from "./panels/chat_box/ChatBox";
 
 const menuItems = [
   { key: "overview", label: "Overview", icon: "tachometer-alt" },
@@ -31,6 +31,10 @@ const menuItems = [
 const AdminDashboard: React.FC = () => {
   const [activeSection, setActiveSection] = useState("overview");
   const [collapsed, setCollapsed] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
+
+  const chatBoxClose = () => {
+  };
 
   return (
     <div
@@ -54,14 +58,19 @@ const AdminDashboard: React.FC = () => {
             <MDBCard className="shadow-sm h-100">
               <MDBCardBody className="p-2">
                 <div className="d-flex justify-content-between align-items-center mb-3">
-                  {!collapsed && <MDBCardTitle className="mb-0">Admin Menu</MDBCardTitle>}
+                  {!collapsed && (
+                    <MDBCardTitle className="mb-0">Admin Menu</MDBCardTitle>
+                  )}
                   <MDBBtn
                     size="sm"
                     color="light"
                     className="shadow-0"
                     onClick={() => setCollapsed(!collapsed)}
                   >
-                    <MDBIcon fas icon={collapsed ? "angle-double-right" : "angle-double-left"} />
+                    <MDBIcon
+                      fas
+                      icon={collapsed ? "angle-double-right" : "angle-double-left"}
+                    />
                   </MDBBtn>
                 </div>
 
@@ -116,6 +125,33 @@ const AdminDashboard: React.FC = () => {
 
       {/* Footer */}
       <Footer />
+
+      {/* Chat Button */}
+      <div style={{ position: "fixed", right: 20, bottom: 80, zIndex: 1050 }}>
+        <MDBBtn
+          color="primary"
+          style={{
+            borderRadius: "50%",
+            width: "56px",
+            height: "56px",
+            padding: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          onClick={() => setChatOpen(!chatOpen)}
+          aria-label="Open chat"
+        >
+          <MDBIcon fas icon="comments" />
+        </MDBBtn>
+      </div>
+
+      {/* Chat Box */}
+      {chatOpen && (
+        <ChatBox
+          onClose={chatBoxClose}
+        />
+      )}
     </div>
   );
 };

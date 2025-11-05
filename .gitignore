@@ -1,6 +1,11 @@
 # Ignore IntelliJ IDEA project files
 .idea/
 *.iml
+**/data/mongodb/
+**/journal/
+*.log
+*.crdownload
+
 
 # Ignore auth data folder
 ecommerce-backend/auth/data/*

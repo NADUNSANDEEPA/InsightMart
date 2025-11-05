@@ -14,6 +14,7 @@ import Swal from "sweetalert2";
 import { ProductCategoryService } from "../../../services/ProductCategoryService";
 import type { ProductCategory } from "../../../interface/ProductCategory";
 import PaginatedTable from "../../../components/Table/PaginatedTable";
+import CloudinaryUpload from "../../../components/CloudinaryUpload/CloudinaryUpload";
 
 const ProductCategoryPanel: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -37,7 +38,7 @@ const ProductCategoryPanel: React.FC = () => {
   const fetchCategories = async () => {
     setLoading(true);
     try {
-      const res = await ProductCategoryService.getAll("1");
+      const res = await ProductCategoryService.getAll("2");
       setCategories(res.data || []);
       setCurrentPage(1);
     } catch (error) {
@@ -200,6 +201,8 @@ const ProductCategoryPanel: React.FC = () => {
                   className="mb-4"
                   placeholder="Enter sub-category name"
                 />
+
+                <CloudinaryUpload/>
 
                 <label className="form-label">Description</label>
                 <textarea

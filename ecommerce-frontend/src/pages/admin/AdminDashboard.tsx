@@ -18,6 +18,7 @@ import Product from "./panels/Product";
 import ProductCategoryPanel from "./panels/ProductCategoryPanel";
 import UserPanel from "./panels/User";
 import ChatBox from "./panels/chat_box/ChatBox";
+import AdminDashboardWelcome from "./panels/AdminDashboardWelcome"
 
 const menuItems = [
   { key: "overview", label: "Overview", icon: "tachometer-alt" },
@@ -34,6 +35,7 @@ const AdminDashboard: React.FC = () => {
   const [chatOpen, setChatOpen] = useState(false);
 
   const chatBoxClose = () => {
+    setChatOpen(!chatOpen);
   };
 
   return (
@@ -98,8 +100,7 @@ const AdminDashboard: React.FC = () => {
               <MDBCardBody>
                 {activeSection === "overview" && (
                   <>
-                    <MDBCardTitle>Dashboard Overview</MDBCardTitle>
-                    <p>Here you can see a summary of system stats.</p>
+                    <AdminDashboardWelcome />
                   </>
                 )}
                 {activeSection === "users" && <UserPanel />}

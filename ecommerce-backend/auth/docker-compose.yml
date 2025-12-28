@@ -4,7 +4,7 @@ services:
     image: mongo:7.0.5
     container_name: auth-mongodb
     ports:
-      - "27019:27017"
+      - "27020:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: springuser
       MONGO_INITDB_ROOT_PASSWORD: 29AZSaQR9DJSxenw

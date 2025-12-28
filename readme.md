@@ -10,12 +10,12 @@
         3. Stop the Containers    : docker compose down
 
     🐍 Docker Details For Jupiter NoteBook
-        1. Build Docker Image : docker build -t lightfm-jupyter .
-        2. Run Docker Container : docker run -p 8888:8888 -v ${PWD}:/app lightfm-jupyter
+        1. Build Docker Image : docker build -t insightmart-model .
+        2. Run Docker Container : docker run -p 8888:8888 -v ${PWD}:/app insightmart-model
 
         Docker Details For Python Backend
         1. Build Docker Image : docker build -t python-backend .
-        2. Run Docker Container : docker run --name python-backend -p 5000:5000 python-backend
+        2. Run Docker Container : docker run --name python-backend -p 5000:5000 -v ${PWD}:/app -e FLASK_ENV=development -e FLASK_DEBUG=1 python-backend
         3. Stop Docker Container : docker stop python-backend
         4. Remove Docker Container : docker rm python-backend
 

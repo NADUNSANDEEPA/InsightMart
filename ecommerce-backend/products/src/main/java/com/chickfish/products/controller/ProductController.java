@@ -1,9 +1,10 @@
 package com.chickfish.products.controller;
 
-import com.chickfish.products.dto.ApiResponse;
+import com.chickfish.products.dto.*;
 import com.chickfish.products.model.Product;
-import com.chickfish.products.model.ProductCategory;
+import com.chickfish.products.service.PredictionService;
 import com.chickfish.products.service.ProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,17 +12,19 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
 
     private final ProductService productService;
+    private final PredictionService predictionService;
 
     @Autowired
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, PredictionService predictionService) {
         this.productService = productService;
+        this.predictionService = predictionService;
     }
 
     @PostMapping("/create")
@@ -38,7 +41,7 @@ public class ProductController {
     @GetMapping("/get-all/{type}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER') or hasRole('NEWVISITOR')")
     public ResponseEntity<ApiResponse<List<Product>>> getAllProducts(@PathVariable String type) {
-
+        log.info("Fetching products by type: {}", type);
         List<Product> products;
         String message = "Fetched all products successfully";
 
@@ -69,6 +72,7 @@ public class ProductController {
     @GetMapping("/get-by-id/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponse<Product>> getProductById(@PathVariable String id) {
+
         Product product = productService.getProductById(id);
         return ResponseEntity.ok(ApiResponse.<Product>builder()
                 .success(true)
@@ -76,6 +80,21 @@ public class ProductController {
                 .data(product)
                 .build());
     }
+
+    @GetMapping("/get-product-for-show-customers/{productCategoryId}")
+    public ResponseEntity<ApiResponse<List<ProductStockResponseDTO>>> getProductForShowForCustomer(
+            @PathVariable String productCategoryId
+    ) {
+        List<ProductStockResponseDTO> products = productService.getProductForShowForCustomer(productCategoryId);
+        return ResponseEntity.ok(
+                ApiResponse.<List<ProductStockResponseDTO>>builder()
+                        .success(true)
+                        .message("Product fetched successfully")
+                        .data(products)
+                        .build()
+        );
+    }
+
 
     @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('ADMIN')")
@@ -130,5 +149,33 @@ public class ProductController {
                 .success(true)
                 .message("Product status updated successfully")
                 .build());
+    }
+
+    @PostMapping("/predict")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<ApiResponse<ProductPredictionResponseDto>> predictProduct(
+            @RequestBody PredictProductsDto predictProductsDto) {
+
+        log.info("Call for Predict Products.");
+        ProductPredictionResponseDto prediction = predictionService.getPrediction(predictProductsDto);
+
+        ApiResponse<ProductPredictionResponseDto> response = new ApiResponse<>();
+        response.setSuccess(true);
+        response.setMessage("Product prediction generated successfully");
+        response.setData(prediction);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/admin-dashboard/load-products-counts")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse> getCountForDashboard() {
+        ApiResponse apiResponse = new ApiResponse();
+        AdminDasboardResponse dasboardResponse = productService.getSummeryForDashboard();
+
+        apiResponse.setSuccess(true);
+        apiResponse.setMessage("Data was loaded");
+        apiResponse.setData(dasboardResponse);
+        return ResponseEntity.ok(apiResponse);
     }
 }

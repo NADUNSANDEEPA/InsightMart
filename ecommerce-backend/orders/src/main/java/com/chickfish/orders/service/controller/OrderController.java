@@ -2,6 +2,7 @@ package com.chickfish.orders.service.controller;
 
 import com.chickfish.orders.service.dto.ApiResponse;
 import com.chickfish.orders.service.model.Order;
+import com.chickfish.orders.service.model.OrderItem;
 import com.chickfish.orders.service.service.OrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,12 +24,7 @@ public class OrderController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponse<Order>> createOrder(@RequestBody Order order) {
         try {
-            Order createdOrder = orderService.createOrder(order);
-            ApiResponse<Order> response = new ApiResponse<>(
-                    true,
-                    "Order created successfully",
-                    createdOrder
-            );
+            ApiResponse response = orderService.createOrder(order);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             ApiResponse<Order> errorResponse = new ApiResponse<>(
@@ -60,5 +56,15 @@ public class OrderController {
             );
             return ResponseEntity.internalServerError().body(errorResponse);
         }
+    }
+
+    @PostMapping("/add-item-to-cart/{cartId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
+    public ResponseEntity<ApiResponse> addItemsToCart(
+            @PathVariable String cartId,
+            @RequestBody OrderItem orderItem) {
+
+        ApiResponse response = orderService.addItemsToCart(cartId, orderItem);
+        return ResponseEntity.ok(response);
     }
 }

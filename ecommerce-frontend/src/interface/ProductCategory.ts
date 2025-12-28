@@ -4,4 +4,5 @@ export interface ProductCategory {
     description: string;
     id: string; 
     active: boolean;
+    imageUrl?: string;
 }

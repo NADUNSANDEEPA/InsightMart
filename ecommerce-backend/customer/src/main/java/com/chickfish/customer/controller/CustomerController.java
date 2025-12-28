@@ -50,6 +50,16 @@ public class CustomerController {
                 .build());
     }
 
+    @GetMapping("/get-customer-by-email/{email}")
+    public ResponseEntity<ApiResponse<Customer>> getCustomerByUsername(@PathVariable String email) {
+        Customer customer = customerService.getCustomerByEmail(email);
+        return ResponseEntity.ok(ApiResponse.<Customer>builder()
+                .success(true)
+                .message("Customer fetched successfully")
+                .data(customer)
+                .build());
+    }
+
     @PutMapping("/update-customer/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponse<Customer>> updateCustomer(@PathVariable String id, @RequestBody Customer customer) {
@@ -89,4 +99,17 @@ public class CustomerController {
                 .message("Customer status updated successfully")
                 .build());
     }
+
+    @GetMapping("/admin-dashboard/get-customer-count")
+    public ResponseEntity<ApiResponse<Integer>> getCustomerCount() {
+        int activeCustomerCount = customerService.getActiveCustomerCount();
+
+        ApiResponse<Integer> response = new ApiResponse<>();
+        response.setSuccess(true);
+        response.setMessage("Active customer count retrieved successfully");
+        response.setData(activeCustomerCount);
+
+        return ResponseEntity.ok(response);
+    }
+
 }

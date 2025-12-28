@@ -5,9 +5,9 @@ from sklearn.exceptions import NotFittedError
 report_bp = Blueprint("report_bp", __name__)
 
 
-@report_bp.route('/')
+@report_bp.route('/test', methods=['GET'])
 def home():
-    return jsonify({"message": "Report Prediction API is running 🚀"})
+    return jsonify({"message": "Report Prediction API is running 🚀."})
 
 
 @report_bp.route('/predict', methods=['POST'])

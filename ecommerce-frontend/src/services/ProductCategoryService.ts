@@ -34,7 +34,7 @@ export const ProductCategoryService = {
 
   update: async (id: string, data: ProductCategory) => {
     try {
-      const response = await apiClient.put(`/api/product-categories/${id}`, data);
+      const response = await apiClient.put(`/api/product-categories/update/${id}`, data);
       return response.data;
     } catch (error: unknown) {
       handleApiError(error as AxiosError);

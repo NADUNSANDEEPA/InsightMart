@@ -51,11 +51,11 @@ const PaginatedTable = <T extends { id: string; active?: boolean }>({
                     <MDBTableHead style={{ backgroundColor: "black" }}>
                         <tr>
                             {columns.map((col, index) => (
-                                <th key={index} className="text-white">
+                                <th key={index} className="text-white text-center">
                                     {col.label}
                                 </th>
                             ))}
-                            {(onEdit || onToggleActive) && <th className="text-white">Action</th>}
+                            {(onEdit || onToggleActive) && <th className="text-white text-center">Action</th>}
                         </tr>
                     </MDBTableHead>
 
@@ -74,7 +74,7 @@ const PaginatedTable = <T extends { id: string; active?: boolean }>({
                                     ))}
 
                                     {(onEdit || onToggleActive) && (
-                                        <td>
+                                        <td className="text-center">
                                             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                                                 {onEdit && (
                                                     <MDBBtn

@@ -20,8 +20,7 @@ public class Product {
 
     private String productName;
     private String productDescription;
-    private Double currentPrice;
-    private Double currentStock;
+    private String imageUrl;
 
     @DBRef
     private ProductCategory productCategory;

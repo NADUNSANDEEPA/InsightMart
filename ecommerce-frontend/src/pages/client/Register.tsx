@@ -354,6 +354,7 @@ const Register: React.FC = () => {
                         </div>
 
                         <div className="mb-4">
+                          <label className="form-label">Religion</label>
                           <select
                             className="form-select"
                             value={religion}
@@ -377,6 +378,7 @@ const Register: React.FC = () => {
 
 
                         <div className="mb-4">
+                          <label className="form-label">Do you have allergies?</label>
                           <select
                             className="form-select"
                             value={allergies}

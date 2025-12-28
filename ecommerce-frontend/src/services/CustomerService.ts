@@ -35,4 +35,24 @@ export const CustomerService = {
     }
   },
 
+  customerByEmail: async (email: string) => {
+    try {
+      const response = await apiClient.get(`/api/customers/get-customer-by-email/${email}`);
+      return response.data;
+    } catch (error: unknown) {
+      handleApiError(error as AxiosError);
+      throw error;
+    }
+  },
+
+  getCustomerCount: async () => {
+    try {
+      const response = await apiClient.get(`/api/customers/admin-dashboard/get-customer-count`);
+      return response.data;
+    } catch (error) {
+      console.error("Failed to fetch customer count", error);
+      throw error;
+    }
+  }
+
 };

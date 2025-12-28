@@ -32,7 +32,7 @@ export const AuthService = {
   logout: async (): Promise<void> => {
     try {
       await api.post("/logout");
-      console.log("🚪 Logged out successfully");
+      console.log("Logged out successfully");
     } catch (error) {
       handleApiError(error as AxiosError);
       throw error;

@@ -37,7 +37,7 @@ const hoverStyle = {
 };
 
 const navLinks = [
-  { label: "Home", href: "./" },
+  { label: "Home", href: "../product-list" },
   { label: "About", href: "#" },
   { label: "Contact Us", href: "#" },
   { label: "Category", href: "#" },
@@ -114,7 +114,6 @@ const Navbar = ({
       className="shadow-0"
       style={{
         top: 0,
-        zIndex: 1030,
         borderRadius: '15px',
         background: backgroundStyle,
         backgroundSize: bgImage ? "cover" : undefined,
@@ -174,7 +173,7 @@ const Navbar = ({
             borderRadius="8px"
             padding="0.8rem 1.5rem"
             icon="shopping-cart"
-            onClick={() => alert("Clicked!")}
+            onClick={() => navigate('/cart')}
           />
 
           {user && user.role !== "NEWVISITOR" ? (

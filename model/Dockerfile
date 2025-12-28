@@ -1,29 +1,28 @@
-# ------------------------------
-# Base Image
-# ------------------------------
 FROM python:3.10-slim
 
 # ------------------------------
-# System Dependencies
+# System dependencies (needed to build LightFM from source)
 # ------------------------------
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
-    python3-dev \
-    libopenblas-dev \
-    libssl-dev \
-    libgomp1 \
     gcc \
+    g++ \
+    libopenblas-dev \
+    liblapack-dev \
+    git \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # ------------------------------
-# Set Working Directory
+# Working directory
 # ------------------------------
 WORKDIR /app
 
 # ------------------------------
-# Install Python Dependencies
+# Upgrade pip & install Python libs
 # ------------------------------
-RUN pip install --upgrade pip && pip install --no-cache-dir \
+RUN pip install --upgrade pip setuptools wheel && \
+    pip install \
     jupyterlab \
     pandas \
     numpy \
@@ -32,17 +31,22 @@ RUN pip install --upgrade pip && pip install --no-cache-dir \
     matplotlib \
     seaborn \
     joblib \
+    statsmodels \
     xgboost \
     pmdarima \
-    prophet \
-    statsmodels
+    prophet
 
 # ------------------------------
-# Expose Ports
+# Install LightFM from GitHub
+# ------------------------------
+RUN pip install git+https://github.com/daviddavo/lightfm
+
+# ------------------------------
+# Expose Jupyter port
 # ------------------------------
 EXPOSE 8888
 
 # ------------------------------
-# Default Command - Launch JupyterLab
+# Start JupyterLab
 # ------------------------------
-CMD ["jupyter", "lab", "--ip=0.0.0.0", "--allow-root", "--no-browser", "--NotebookApp.token=", "--NotebookApp.password="]
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--allow-root", "--no-browser", "--NotebookApp.token=", "--NotebookApp.password="]

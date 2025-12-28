@@ -99,18 +99,25 @@ public class UserService {
     }
 
     public AuthResponse visitorReg(TokenInitializeRequest request) {
-        Optional<TokenInitialize> existingToken = tokenInitializeRepository
-                .findByMacAddress(request.getMacAddress());
+
+        Optional<TokenInitialize> existingToken =
+                tokenInitializeRepository.findByMacAddress(
+                        request.getMacAddress()
+                );
 
         if (existingToken.isPresent()) {
             TokenInitialize tokenData = existingToken.get();
+
             return AuthResponse.builder()
                     .token(tokenData.getToken())
                     .username(tokenData.getMacAddress())
                     .build();
         }
 
-        String jwtToken = jwtService.generateToken(request.getMacAddress(), UserRoles.valueOf("NEWVISITOR"));
+        String jwtToken = jwtService.generateToken(
+                request.getMacAddress(),
+                UserRoles.NEWVISITOR
+        );
 
         TokenInitialize newToken = TokenInitialize.builder()
                 .id(UUID.randomUUID().toString())

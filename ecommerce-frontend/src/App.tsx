@@ -7,6 +7,8 @@ import About from "./pages/About";
 import Login from "./pages/client/Login";
 import Register from "./pages/client/Register";
 import ProductList from "./pages/client/ProductList";
+import Product from "./pages/client/Product";
+import Cart from "./pages/client/Cart";
 
 import AdminDashboard from "./pages/admin/AdminDashboard";
 
@@ -22,6 +24,8 @@ const App: React.FC = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/product-list" element={<ProductList />} />
+          <Route path="/product/:id" element={<Product />} />
+          <Route path="/cart" element={<Cart />} />
 
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
         </Routes>

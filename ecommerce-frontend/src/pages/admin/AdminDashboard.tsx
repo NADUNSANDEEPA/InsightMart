@@ -19,12 +19,14 @@ import ProductCategoryPanel from "./panels/ProductCategoryPanel";
 import UserPanel from "./panels/User";
 import ChatBox from "./panels/chat_box/ChatBox";
 import AdminDashboardWelcome from "./panels/AdminDashboardWelcome"
+import Stocks from "./panels/Stocks";
 
 const menuItems = [
   { key: "overview", label: "Overview", icon: "tachometer-alt" },
   { key: "users", label: "Users", icon: "users" },
-  { key: "product", label: "Product", icon: "box" },
   { key: "product-category", label: "Product Category", icon: "tags" },
+  { key: "product", label: "Product", icon: "box" },
+  { key: "stock", label: "Stocks", icon: "cubes" },
   { key: "reports", label: "Reports", icon: "file-alt" },
   { key: "settings", label: "Settings", icon: "cog" },
 ];
@@ -106,6 +108,7 @@ const AdminDashboard: React.FC = () => {
                 {activeSection === "users" && <UserPanel />}
                 {activeSection === "product-category" && <ProductCategoryPanel />}
                 {activeSection === "product" && <Product />}
+                {activeSection === "stock" && <Stocks />}
                 {activeSection === "reports" && (
                   <>
                     <MDBCardTitle>Reports</MDBCardTitle>

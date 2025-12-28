@@ -1,5 +1,7 @@
 package com.chickfish.orders.service.model;
 
+import com.chickfish.orders.service.enums.CartStatus;
+import com.chickfish.orders.service.enums.DeliveryStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +22,7 @@ public class Order {
     @Id
     private String id;
 
-    private Integer customerId;
+    private String customerId;
     private String customerAgeGroup;
     private String customerReligion;
     private String city;
@@ -30,9 +32,9 @@ public class Order {
 
     private LocalDate buyingDate;
     private String paymentMethod;
-    private String orderStatus;
+    private CartStatus orderStatus;
     private String deliveryType;
-    private String deliveryStatus;
+    private DeliveryStatus deliveryStatus;
 
     private LocalDateTime createdAt;
 

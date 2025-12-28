@@ -60,4 +60,13 @@ public class CustomerService {
         customerRepository.save(customer);
         return true;
     }
+
+    public Customer getCustomerByEmail(String email) {
+        return customerRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Customer not found with email " + email));
+    }
+
+    public int getActiveCustomerCount() {
+        return customerRepository.countByActiveTrue();
+    }
 }

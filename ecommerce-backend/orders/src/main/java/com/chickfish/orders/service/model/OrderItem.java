@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 public class OrderItem {
+    private String CartId;
     private String productCode;
     private String productName;
     private String productCategory;

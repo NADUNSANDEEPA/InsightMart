@@ -15,8 +15,9 @@ import { ChartService } from "../../../services/ChartService";
 import { ProductCategoryService } from "../../../services/ProductCategoryService";
 import type { ProductCategory } from "../../../interface/ProductCategory";
 import type { Product } from "../../../interface/Product";
-import SalesAreaChart from "./chat_box/SalesAreaChart";
+import SalesAreaChart from "../../../components/AdminLayout/AdminComponents/SalesAreaChart";
 import type { DailySale } from "../../../interface/TimeBasedSales";
+import { SalesByReligionChart } from "../../../components/AdminLayout/AdminComponents/SalesByReligionChart";
 
 interface DashboardData {
     totalCustomers: number;
@@ -42,11 +43,12 @@ const AdminDashboardWelcome: React.FC = () => {
     const [startDate, setStartDate] = useState("2020-01-01");
     const [endDate, setEndDate] = useState("2025-12-30");
 
+    const [activeTab, setActiveTab] = useState("table");
+
 
     useEffect(() => {
         const loadData = async () => {
             await fetchData();
-            await loadDataForReligionBasedChart();
             await loadDataForProvinceBasedChart();
             await fetchCategories();
         };
@@ -143,7 +145,7 @@ const AdminDashboardWelcome: React.FC = () => {
         setProductCode(value);
     }
 
-    const loadTimeBasedSales = async () => {
+    const loadTimeBaseSaleChart = async () => {
         try {
             setLoading(true);
 
@@ -156,6 +158,18 @@ const AdminDashboardWelcome: React.FC = () => {
 
 
             setDailySales(result);
+        } catch (error) {
+            console.error("Failed to load time-based sales", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+    const loadCharts = async () => {
+        try {
+            await loadTimeBaseSaleChart();
+            await loadDataForReligionBasedChart();
         } catch (error) {
             console.error("Failed to load time-based sales", error);
         } finally {
@@ -227,10 +241,10 @@ const AdminDashboardWelcome: React.FC = () => {
                         </MDBCol>
                     </MDBRow>
 
-                    <MDBCard className="shadow-none border border-dark">
+                    <MDBCard className="shadow-none border border-dark rounded-0">
                         <MDBCardBody>
                             <MDBCardTitle>
-                                Today’s Category-wise Sales
+                                Category-wise Sales
                             </MDBCardTitle>
 
                             <MDBRow className="mb-3">
@@ -304,18 +318,33 @@ const AdminDashboardWelcome: React.FC = () => {
                                 <MDBCol className="text-end">
                                     <button
                                         className="btn btn-dark shadow-none"
-                                        onClick={loadTimeBasedSales}
+                                        onClick={loadCharts}
                                         disabled={!startDate || !endDate}
+                                        type="button"
                                     >
                                         Apply Filter
                                     </button>
                                 </MDBCol>
                             </MDBRow>
+                        </MDBCardBody>
+                    </MDBCard>
+                    <MDBCard className="shadow-none border border-dark rounded-0">
+                        <MDBCardBody>
+                            <MDBCardTitle className="text-decoration-underline">
+                                Category-wise Sales
+                            </MDBCardTitle>
                             <div className="mt-5">
                                 <SalesAreaChart dailySales={dailySales} />
                             </div>
                         </MDBCardBody>
-
+                    </MDBCard>
+                    <MDBCard className="shadow-none border border-dark rounded-0 mt-3">
+                        <MDBCardBody>
+                            <MDBCardTitle className="text-decoration-underline">
+                                Sales Distribution by Religion
+                            </MDBCardTitle>
+                            <SalesByReligionChart data={religionChartData} />
+                        </MDBCardBody>
                     </MDBCard>
                 </>
             )}

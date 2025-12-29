@@ -65,9 +65,7 @@ export const SalesByReligionChart: React.FC<Props> = ({ data }) => {
   };
 
   return (
-    <div style={{ height: "400px"}}>
       <Bar data={chartData} options={options} />
-    </div>
   );
 };
 

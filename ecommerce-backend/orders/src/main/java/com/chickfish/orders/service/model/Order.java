@@ -30,7 +30,6 @@ public class Order {
 
     private List<OrderItem> items;
 
-    private LocalDate buyingDate;
     private String paymentMethod;
     private CartStatus orderStatus;
     private String deliveryType;

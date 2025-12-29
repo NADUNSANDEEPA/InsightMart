@@ -11,6 +11,7 @@ import Product from "./pages/client/Product";
 import Cart from "./pages/client/Cart";
 
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import Checkout from "./pages/client/Checkout";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App: React.FC = () => {
           <Route path="/product-list" element={<ProductList />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
 
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
         </Routes>

@@ -1,19 +1,10 @@
 import { handleApiError } from "../util/ExceptionHandler";
-import type { Cart } from "../interface/Cart";
 import apiClient from "./ApiClient";
 import type { AxiosError } from "axios";
-import type { CartItem } from "../interface/CartItem";
+import type { OrderRequest } from "../interface/order/OrderRequest";
+import type { CheckOutRequest } from "../interface/CheckOutRequest";
 
 export const CartService = {
-    create: async (data: Cart) => {
-        try {
-            const response = await apiClient.post("/api/orders/create", data);
-            return response.data;
-        } catch (error: unknown) {
-            handleApiError(error as AxiosError);
-            throw error;
-        }
-    },
     getAll: async () => {
         try {
             const response = await apiClient.get("/api/carts/get-all-carts");
@@ -23,31 +14,48 @@ export const CartService = {
             throw error;
         }
     },
-    addOrderItems: async (cartId: string, cartItem: CartItem) => {
+    addItemsToCart: async (orderRequest: OrderRequest) => {
         try {
             const response = await apiClient.post(
-                `/api/orders/add-item-to-cart/${cartId}`,
-                {
-                    cartId: cartId,
-                    productCode: cartItem.productCode,
-                    productName: cartItem.productName,
-                    productCategory: cartItem.productCategory,
-                    quantity: cartItem.quantity,
-                    unitPrice: cartItem.unitPrice,
-                    discount: cartItem.discount,
-                    rate: cartItem.rate
-                }
+                "/api/orders/add-item-to-cart",
+                orderRequest
             );
 
             return response.data;
         } catch (error: any) {
-            console.error("Error adding item to cart:", error);
+            console.error("Error adding items to cart:", error);
 
             return {
                 success: false,
-                message: error?.response?.data?.message || "Failed to add item to cart",
+                message:
+                    error?.response?.data?.message ||
+                    "Failed to add items to cart",
                 data: null
             };
+        }
+    },
+
+    getAllOrdersByType: async (type: string, customerId: string) => {
+        try {
+            const response = await apiClient.get(
+                `/api/orders/get-all-order/${type}/${customerId}`
+            );
+            return response.data;
+        } catch (error: unknown) {
+            handleApiError(error as AxiosError);
+            throw error;
+        }
+    },
+    checkOutProcess: async (checkoutData: CheckOutRequest) => {
+        try {
+            const response = await apiClient.post(
+                `/api/orders/checkout`,
+                checkoutData
+            );
+            return response.data;
+        } catch (error: unknown) {
+            handleApiError(error as AxiosError);
+            throw error;
         }
     }
 };

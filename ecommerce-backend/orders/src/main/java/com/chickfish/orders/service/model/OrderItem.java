@@ -4,20 +4,20 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class OrderItem {
-    private String CartId;
+    private String id;
     private String productCode;
     private String productName;
     private String productCategory;
-    private Integer quantity;
-    private BigDecimal unitPrice;
-    private BigDecimal discount;
+    private Double quantity;
+    private Double unitPrice;
+    private Double discount;
     private Integer rate;
+    private LocalDateTime createdAt;
 }

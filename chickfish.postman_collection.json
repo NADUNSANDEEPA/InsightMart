@@ -1,0 +1,1461 @@
+{
+	"info": {
+		"_postman_id": "24fb5a0c-2137-4cd3-a455-4e9494c2e310",
+		"name": "chickfish",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32834840"
+	},
+	"item": [
+		{
+			"name": "products category",
+			"item": [
+				{
+					"name": "Product Category - Create",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"categoryName\": \"Fish\",\n  \"subCategoryName\": \"Tuna\",\n  \"description\": \"22\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API-GATEWAY}}/api/product-categories/create",
+							"host": [
+								"{{API-GATEWAY}}"
+							],
+							"path": [
+								"api",
+								"product-categories",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product Category - Get by ID",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{API-GATEWAY}}/api/product-categories/68b8285f69e2973665cf9698",
+							"host": [
+								"{{API-GATEWAY}}"
+							],
+							"path": [
+								"api",
+								"product-categories",
+								"68b8285f69e2973665cf9698"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product Category - Update",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"categoryName\": \"Meat\",\n  \"subCategoryName\": \"Mutton\",\n  \"description\": \"Fresh Mutton products\",\n  \"imageUrl\": \"https://res.cloudinary.com/nadun/image/upload/v1766327272/fngzbbtpzavj9n76maoc.webp\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API-GATEWAY}}/api/product-categories/update/0.45769322385832656",
+							"host": [
+								"{{API-GATEWAY}}"
+							],
+							"path": [
+								"api",
+								"product-categories",
+								"update",
+								"0.45769322385832656"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product Category - Delete By Id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{API-GATEWAY}}/api/product-categories/delete/68b8285f69e2973665cf9698",
+							"host": [
+								"{{API-GATEWAY}}"
+							],
+							"path": [
+								"api",
+								"product-categories",
+								"delete",
+								"68b8285f69e2973665cf9698"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product Category - Get All",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc2MjMzMjAxNCwiZXhwIjoxNzYyNDE4NDE0LCJyb2xlIjoiQURNSU4ifQ.S5ugB8HRmS8fTLTIWDGzOAINMPpomK56qbxrOgP--kWUCy8OBK84ugG3muo7lNOXYr1TTE_kTcphnI2sG4lasQ"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:9021/api/product-categories/get-all/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9021",
+							"path": [
+								"api",
+								"product-categories",
+								"get-all",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "customer",
+			"item": [
+				{
+					"name": "customer - create",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fullName\": \"Nimal Perera\",\n  \"address\": \"No. 25, Galle Road\",\n  \"email\": \"nimal.perera@example.com\",\n  \"phone\": \"+94771234567\",\n  \"password\": \"securePassword123\",\n  \"city\": \"Colombo\",\n  \"province\": \"Western\",\n  \"customerType\": \"NORMAL\",\n  \"familySize\": 4,\n  \"isThereAllergic\": \"Yes - Shellfish allergy\",\n  \"religion\": \"BUDDHIST\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API-GATEWAY}}/api/customers/create",
+							"host": [
+								"{{API-GATEWAY}}"
+							],
+							"path": [
+								"api",
+								"customers",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "customer - get all customer",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{API-GATEWAY}}/api/customers/get-all-customers",
+							"host": [
+								"{{API-GATEWAY}}"
+							],
+							"path": [
+								"api",
+								"customers",
+								"get-all-customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "customer - get customer by id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{API-GATEWAY}}/api/customers/get-customer/68b71d46e4a295d151147ab5",
+							"host": [
+								"{{API-GATEWAY}}"
+							],
+							"path": [
+								"api",
+								"customers",
+								"get-customer",
+								"68b71d46e4a295d151147ab5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "customer - update customer",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Doe Updated\",\n  \"email\": \"john.updated@example.com\",\n  \"age\": 31,\n  \"religion\": \"HINDU\",\n  \"province\": \"Central\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API-GATEWAY}}/api/customers/update-customer/68b71c9afea83f49503adfdf",
+							"host": [
+								"{{API-GATEWAY}}"
+							],
+							"path": [
+								"api",
+								"customers",
+								"update-customer",
+								"68b71c9afea83f49503adfdf"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "customer - delete customer",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API-GATEWAY}}/api/customers/delete-customer/68b71c9afea83f49503adfdf",
+							"host": [
+								"{{API-GATEWAY}}"
+							],
+							"path": [
+								"api",
+								"customers",
+								"delete-customer",
+								"68b71c9afea83f49503adfdf"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin Dashboard - Get Count Count",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{API-GATEWAY}}/api/customers/admin-dashboard/get-customer-count",
+							"host": [
+								"{{API-GATEWAY}}"
+							],
+							"path": [
+								"api",
+								"customers",
+								"admin-dashboard",
+								"get-customer-count"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "Auth Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse JSON response\r",
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"// Check if token exists\r",
+									"if (jsonData.data && jsonData.data.token) {\r",
+									"    // Save token to environment variable\r",
+									"    pm.environment.set(\"token\", jsonData.data.token);\r",
+									"    console.log(\"Token saved to environment:\", jsonData.data.token);\r",
+									"} else {\r",
+									"    console.log(\"No token found in response!\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"sathsaran@gmail.com\",\n    \"password\": \"Nadun1459@\"\n}\n\n// {\n//     \"username\": \"admin\",\n//     \"password\": \"admin\"\n// }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API-GATEWAY}}/api/auth/login",
+							"host": [
+								"{{API-GATEWAY}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Customer - Auth Login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"sathsaran@gmail.com\",\n    \"password\": \"Nadun1459@\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API-GATEWAY}}/api/auth/login",
+									"host": [
+										"{{API-GATEWAY}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 23 Oct 2025 14:05:59 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Login successful\",\n    \"data\": {\n        \"token\": \"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYXRoc2FyYW5AZ21haWwuY29tIiwiaWF0IjoxNzYxMjI4MzU5LCJleHAiOjE3NjEzMTQ3NTksInJvbGUiOiJDVVNUT01FUiJ9.bGFHmfjaUi-EKSGe7D-gl66NxA9BAj3D_keCTYgZt0YwZjxD3gCbFA0IlYiZKdX95TC4iSKK_dL61V8guPukWw\",\n        \"username\": \"sathsaran@gmail.com\"\n    }\n}"
+						},
+						{
+							"name": "Admin - Auth Login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"admin\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API-GATEWAY}}/api/auth/login",
+									"host": [
+										"{{API-GATEWAY}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 23 Oct 2025 14:06:38 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Login successful\",\n    \"data\": {\n        \"token\": \"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc2MTIyODM5OCwiZXhwIjoxNzYxMzE0Nzk4LCJyb2xlIjoiQURNSU4ifQ.-q5HFQLg1j4sqRpfnz_u1UuHoAGx78ES5M4qpBdA6vXB3l12r1_1GOryTXuh39lmxUPvjLjnIqnW-Mp9ynQbuw\",\n        \"username\": \"admin\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Register",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"admin\",\n    \"role\": \"ADMIN\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API-GATEWAY}}/api/auth/register",
+							"host": [
+								"{{API-GATEWAY}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validate",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8083/api/auth/validate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"api",
+								"auth",
+								"validate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Visitor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse JSON response\r",
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"// Check if token exists\r",
+									"if (jsonData.data && jsonData.data.token) {\r",
+									"    // Save token to environment variable\r",
+									"    pm.environment.set(\"token\", jsonData.data.token);\r",
+									"    console.log(\"Token saved to environment:\", jsonData.data.token);\r",
+									"} else {\r",
+									"    console.log(\"No token found in response!\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"1\",\n    \"ipAddress\": \"192.168.1.10\",\n    \"macAddress\": \"AA-BB-CC-DD-EE-FF\",\n    \"timestamp\": \"2025-09-21T15:30:00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API-GATEWAY}}/api/auth/visitor-reg",
+							"host": [
+								"{{API-GATEWAY}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"visitor-reg"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "product",
+			"item": [
+				{
+					"name": "Product - Create",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productCode\": \"941837\",\n    \"productName\": \"s\",\n    \"productDescription\": \"s\",\n    \"currentPrice\": 1,\n    \"currentStock\": 1,\n    \"productCategory\": {\n        \"id\": \"147562\",\n        \"categoryName\": \"Meat\",\n        \"subCategoryName\": \"Pork\",\n        \"description\": \"\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API-GATEWAY}}/api/products/create",
+							"host": [
+								"{{API-GATEWAY}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product - Get All",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{API-GATEWAY}}/api/products/get-all/1",
+							"host": [
+								"{{API-GATEWAY}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"get-all",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product - For Dashboard",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{API-GATEWAY}}/api/products/get-product-for-show-customers/0.540661378363734",
+							"host": [
+								"{{API-GATEWAY}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"get-product-for-show-customers",
+								"0.540661378363734"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product By Category",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product Count For Dashboard",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{API-GATEWAY}}/api/products/admin-dashboard/load-products-counts",
+							"host": [
+								"{{API-GATEWAY}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"admin-dashboard",
+								"load-products-counts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "python backend",
+			"item": [
+				{
+					"name": "Chart",
+					"item": [
+						{
+							"name": "Religion Based Chart",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"start_date\": \"2024-01-01\",\r\n    \"end_date\": \"2024-01-31\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/chart/api/sales/by-religion",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"chart",
+										"api",
+										"sales",
+										"by-religion"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Province Basse Chart",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"start_date\": \"2024-01-01\",\r\n    \"end_date\": \"2024-01-31\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/chart/api/sales/by-province",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"chart",
+										"api",
+										"sales",
+										"by-province"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Time Based Chart",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"start_date\": \"2024-01-01\",\r\n    \"end_date\": \"2024-01-31\",\r\n    \"product_name\": \"Whole Chicken\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/chart/api/sales/time-based",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"chart",
+										"api",
+										"sales",
+										"time-based"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Predict Report Type",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_question\": \"I want to generate a weekly performance report\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/report-generate/predict",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"report-generate",
+								"predict"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product Predict",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customer_id\": \"CUST_001\",\n  \"customer_age_group\": \"30-40\",\n  \"customer_religion\": \"BUDDHIST\",\n  \"family_size\": 4,\n  \"city\": \"Ratnapura\",\n  \"province\": \"Sabaragamuwa\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/product-predict/predict",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"product-predict",
+								"predict"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test Product  Prediction",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/product-predict/test",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"product-predict",
+								"test"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Spring Call for Product Prediction",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customer_id\": \"CUST_101\",\n    \"customer_age_group\": \"30-40\",\n    \"customer_religion\": \"BUDDHIST\",\n    \"family_size\": 4,\n    \"city\": \"Ratnapura\",\n    \"province\": \"Sabaragamuwa\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API-GATEWAY}}/api/products/predict",
+							"host": [
+								"{{API-GATEWAY}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"predict"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "orders",
+			"item": [
+				{
+					"name": "Create-Order",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"ORD-1001\",\n  \"customerId\": \"vishwa_001\",\n  \"customerAgeGroup\": \"25-34\",\n  \"customerReligion\": \"Buddhist\",\n  \"city\": \"Matara\",\n  \"province\": \"Southern\",\n  \"buyingDate\": \"2025-12-24\",\n  \"paymentMethod\": \"CARD\",\n  \"orderStatus\": \"ACTIVE\",\n  \"deliveryType\": \"HOME_DELIVERY\",\n  \"deliveryStatus\": \"PENDING\",\n  \"createdAt\": \"2025-12-24T20:15:00\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API-GATEWAY}}/api/orders/create",
+							"host": [
+								"{{API-GATEWAY}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"create"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"customerId\": 101,\n    \"customerAgeGroup\": \"25-34\",\n    \"customerReligion\": \"Christian\",\n    \"city\": \"Colombo\",\n    \"province\": \"Western\",\n    \"items\": [\n      {\n        \"productCode\": \"PRD001\",\n        \"productName\": \"Grilled Chicken Sandwich\",\n        \"productCategory\": \"Food\",\n        \"quantity\": 2,\n        \"unitPrice\": 450.00,\n        \"discount\": 25.00,\n        \"rate\": 5\n      },\n      {\n        \"productCode\": \"PRD002\",\n        \"productName\": \"Fresh Orange Juice\",\n        \"productCategory\": \"Beverage\",\n        \"quantity\": 1,\n        \"unitPrice\": 250.00,\n        \"discount\": 0.00,\n        \"rate\": 4\n      }\n    ],\n    \"buyingDate\": \"2025-10-26\",\n    \"paymentMethod\": \"CREDIT_CARD\",\n    \"orderStatus\": \"PENDING\",\n    \"deliveryType\": \"HOME_DELIVERY\",\n    \"deliveryStatus\": \"PROCESSING\"\n  }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API-GATEWAY}}/api/orders/create",
+									"host": [
+										"{{API-GATEWAY}}"
+									],
+									"path": [
+										"api",
+										"orders",
+										"create"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 05 Nov 2025 08:41:24 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Order created successfully\",\n    \"data\": {\n        \"id\": \"690b0db42bb054f6dbb0234f\",\n        \"customerId\": 101,\n        \"customerAgeGroup\": \"25-34\",\n        \"customerReligion\": \"Christian\",\n        \"city\": \"Colombo\",\n        \"province\": \"Western\",\n        \"items\": [\n            {\n                \"productCode\": \"PRD001\",\n                \"productName\": \"Grilled Chicken Sandwich\",\n                \"productCategory\": \"Food\",\n                \"quantity\": 2,\n                \"unitPrice\": 450,\n                \"discount\": 25,\n                \"rate\": 5\n            },\n            {\n                \"productCode\": \"PRD002\",\n                \"productName\": \"Fresh Orange Juice\",\n                \"productCategory\": \"Beverage\",\n                \"quantity\": 1,\n                \"unitPrice\": 250,\n                \"discount\": 0,\n                \"rate\": 4\n            }\n        ],\n        \"buyingDate\": \"2025-10-26\",\n        \"paymentMethod\": \"CREDIT_CARD\",\n        \"orderStatus\": \"PENDING\",\n        \"deliveryType\": \"HOME_DELIVERY\",\n        \"deliveryStatus\": \"PROCESSING\",\n        \"createdAt\": \"2025-11-05T14:11:24.7369731\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get-Orders",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{API-GATEWAY}}/api/orders/get-today-all-order",
+							"host": [
+								"{{API-GATEWAY}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"get-today-all-order"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{API-GATEWAY}}/api/orders/get-today-all-order",
+									"host": [
+										"{{API-GATEWAY}}"
+									],
+									"path": [
+										"api",
+										"orders",
+										"get-today-all-order"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 05 Nov 2025 08:42:38 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Orders fetched successfully\",\n    \"data\": [\n        {\n            \"id\": \"690b0d8a2bb054f6dbb0234e\",\n            \"customerId\": 101,\n            \"customerAgeGroup\": \"25-34\",\n            \"customerReligion\": \"Christian\",\n            \"city\": \"Colombo\",\n            \"province\": \"Western\",\n            \"items\": [\n                {\n                    \"productCode\": \"PRD001\",\n                    \"productName\": \"Grilled Chicken Sandwich\",\n                    \"productCategory\": \"Food\",\n                    \"quantity\": 2,\n                    \"unitPrice\": 450,\n                    \"discount\": 25,\n                    \"rate\": 5\n                },\n                {\n                    \"productCode\": \"PRD002\",\n                    \"productName\": \"Fresh Orange Juice\",\n                    \"productCategory\": \"Beverage\",\n                    \"quantity\": 1,\n                    \"unitPrice\": 250,\n                    \"discount\": 0,\n                    \"rate\": 4\n                }\n            ],\n            \"buyingDate\": \"2025-10-26\",\n            \"paymentMethod\": \"CREDIT_CARD\",\n            \"orderStatus\": \"PENDING\",\n            \"deliveryType\": \"HOME_DELIVERY\",\n            \"deliveryStatus\": \"PROCESSING\",\n            \"createdAt\": \"2025-11-05T14:10:42.258\"\n        },\n        {\n            \"id\": \"690b0db42bb054f6dbb0234f\",\n            \"customerId\": 101,\n            \"customerAgeGroup\": \"25-34\",\n            \"customerReligion\": \"Christian\",\n            \"city\": \"Colombo\",\n            \"province\": \"Western\",\n            \"items\": [\n                {\n                    \"productCode\": \"PRD001\",\n                    \"productName\": \"Grilled Chicken Sandwich\",\n                    \"productCategory\": \"Food\",\n                    \"quantity\": 2,\n                    \"unitPrice\": 450,\n                    \"discount\": 25,\n                    \"rate\": 5\n                },\n                {\n                    \"productCode\": \"PRD002\",\n                    \"productName\": \"Fresh Orange Juice\",\n                    \"productCategory\": \"Beverage\",\n                    \"quantity\": 1,\n                    \"unitPrice\": 250,\n                    \"discount\": 0,\n                    \"rate\": 4\n                }\n            ],\n            \"buyingDate\": \"2025-10-26\",\n            \"paymentMethod\": \"CREDIT_CARD\",\n            \"orderStatus\": \"PENDING\",\n            \"deliveryType\": \"HOME_DELIVERY\",\n            \"deliveryStatus\": \"PROCESSING\",\n            \"createdAt\": \"2025-11-05T14:11:24.736\"\n        }\n    ]\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "stocks",
+			"item": [
+				{
+					"name": "Get Stock By Product Code",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{API-GATEWAY}}/api/stocks/get-by-product-code/904916",
+							"host": [
+								"{{API-GATEWAY}}"
+							],
+							"path": [
+								"api",
+								"stocks",
+								"get-by-product-code",
+								"904916"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Product",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{API-GATEWAY}}/api/stocks/get-all-stocks",
+							"host": [
+								"{{API-GATEWAY}}"
+							],
+							"path": [
+								"api",
+								"stocks",
+								"get-all-stocks"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

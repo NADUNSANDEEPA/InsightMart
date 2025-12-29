@@ -8,6 +8,8 @@ import {
     MDBCol,
     MDBIcon,
     MDBSpinner,
+    MDBBtnGroup,
+    MDBBtn,
 } from "mdb-react-ui-kit";
 import { CustomerService } from "../../../services/CustomerService";
 import { ProductService } from "../../../services/ProductService";
@@ -18,6 +20,7 @@ import type { Product } from "../../../interface/Product";
 import SalesAreaChart from "../../../components/AdminLayout/AdminComponents/SalesAreaChart";
 import type { DailySale } from "../../../interface/TimeBasedSales";
 import { SalesByReligionChart } from "../../../components/AdminLayout/AdminComponents/SalesByReligionChart";
+import ReligionSalesTable from "../../../components/AdminLayout/AdminComponents/ReligionSalesTable";
 
 interface DashboardData {
     totalCustomers: number;
@@ -43,7 +46,7 @@ const AdminDashboardWelcome: React.FC = () => {
     const [startDate, setStartDate] = useState("2020-01-01");
     const [endDate, setEndDate] = useState("2025-12-30");
 
-    const [activeTab, setActiveTab] = useState("table");
+    const [salesByReligionChartMode, setSalesByReligionChartMode] = useState<"chart" | "table">("chart");
 
 
     useEffect(() => {
@@ -340,10 +343,40 @@ const AdminDashboardWelcome: React.FC = () => {
                     </MDBCard>
                     <MDBCard className="shadow-none border border-dark rounded-0 mt-3">
                         <MDBCardBody>
-                            <MDBCardTitle className="text-decoration-underline">
+                            <MDBCardTitle className="text-decoration-underline mb-3">
                                 Sales Distribution by Religion
                             </MDBCardTitle>
-                            <SalesByReligionChart data={religionChartData} />
+
+                            <div className="mb-3">
+                                <MDBBtnGroup>
+                                    <MDBBtn
+                                        outline
+                                        size="sm"
+                                        color="dark"
+                                        className="shadow-none"
+                                        onClick={() => setSalesByReligionChartMode("chart")}
+                                        active={salesByReligionChartMode === "chart"}
+                                    >
+                                        Chart Mode
+                                    </MDBBtn>
+                                    <MDBBtn
+                                        outline
+                                        size="sm"
+                                        color="dark"
+                                        className="shadow-none"
+                                        onClick={() => setSalesByReligionChartMode("table")}
+                                        active={salesByReligionChartMode === "table"}
+                                    >
+                                        Table Mode
+                                    </MDBBtn>
+                                </MDBBtnGroup>
+                            </div>
+
+                            {salesByReligionChartMode === "chart" ? (
+                                <SalesByReligionChart data={religionChartData} />
+                            ) : (
+                                <ReligionSalesTable data={religionChartData} />
+                            )}
                         </MDBCardBody>
                     </MDBCard>
                 </>

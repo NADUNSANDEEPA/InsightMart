@@ -107,9 +107,13 @@ export default function Product() {
                                                         </MDBCardTitle>
                                                         {/* Stock Details */}
                                                         <div className="mt-2 mb-5">
-                                                            <p className="mb-1"><strong>Price:</strong> LKR {product.pricePerKg.toLocaleString()}</p>
+                                                            <p className="mb-1">
+                                                                <strong>Price:</strong> LKR {(product.pricePerKg ?? 0).toLocaleString()}
+                                                            </p>
+                                                            <p className="mb-1">
+                                                                <strong>Discount:</strong> LKR {(product.discount ?? 0).toLocaleString()} per Kg
+                                                            </p>
                                                             <p className="mb-1"><strong>Available Stock:</strong> {product.availableStockKg} Kg</p>
-                                                            <p className="mb-1"><strong>Discount:</strong> LKR {product.discount.toLocaleString()} per Kg</p>
                                                             <p className="mb-1"><strong>Eligible Weight for Discount:</strong> {product.discountEligibleWeight} Kg</p>
                                                             <p className="mb-1">
                                                                 <strong>Status:</strong>{" "}
@@ -121,7 +125,9 @@ export default function Product() {
                                                         <hr />
                                                         {/* Add to Cart */}
                                                         <div className="mt-auto d-flex justify-content-between align-items-center">
-                                                            <span className="fw-normal" style={{ fontSize: "18px" }}>LKR {product.pricePerKg.toLocaleString()}</span>
+                                                            <span className="fw-normal" style={{ fontSize: "18px" }}>
+                                                                LKR {(product.pricePerKg ?? 0).toLocaleString()}
+                                                            </span>
                                                             <MDBBtn outline color="dark" onClick={() => handleAddToCartClick(product)}>
                                                                 <MDBIcon fas icon="shopping-cart" className="me-2" />
                                                                 Add to Cart
@@ -141,6 +147,7 @@ export default function Product() {
                     {/* Cart Panel */}
                     <CartPanel
                         product={selectedProduct}
+                        productCategoryName={productCategory?.subCategoryName || ""}
                         isOpen={cartPanelOpen}
                         onClose={handleCloseCart}
                     />

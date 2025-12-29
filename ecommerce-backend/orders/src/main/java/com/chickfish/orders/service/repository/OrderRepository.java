@@ -19,5 +19,5 @@ public interface OrderRepository extends MongoRepository<Order, String> {
             CartStatus orderStatus
     );
 
-    Optional<Object> findByIdAndOrderStatus(String cartId, CartStatus cartStatus);
+    Optional<Order> findByCustomerIdAndOrderStatus(String customerId, CartStatus cartStatus);
 }

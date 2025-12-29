@@ -5,18 +5,16 @@ import { CartService } from "../../services/CartService";
 import { CustomerService } from "../../services/CustomerService";
 import Swal from "sweetalert2";
 import type { Customer } from "../../interface/Customer";
-import type { Cart } from "../../interface/Cart";
-import type { CartItem } from "../../interface/CartItem";
-import { DeliveryStatusType } from "../../types/DeliveryStatusType";
-import { CartStatusType } from "../../types/CartStatusType";
+import type { OrderRequest } from "../../interface/order/OrderRequest";
 
 interface CartPanelProps {
     product: ProductStock | null;
+    productCategoryName: string;
     isOpen: boolean;
     onClose: () => void;
 }
 
-const CartPanel: React.FC<CartPanelProps> = ({ product, isOpen, onClose }) => {
+const CartPanel: React.FC<CartPanelProps> = ({ product, productCategoryName, isOpen, onClose }) => {
     const [quantity, setQuantity] = useState(1);
     const [maxQuantity, setMaxQuantity] = useState(0);
 
@@ -42,15 +40,16 @@ const CartPanel: React.FC<CartPanelProps> = ({ product, isOpen, onClose }) => {
 
     async function productAddToCart(product: ProductStock, quantity: number) {
         const accessToken = localStorage.getItem("token");
+
         if (!accessToken) {
             Swal.fire("Error", "You must be logged in to add items to cart", "error");
             return;
         }
 
-        const decodedToken = JSON.parse(atob(accessToken.split(".")[1]));
         let customerProfile: Customer;
 
         try {
+            const decodedToken: any = JSON.parse(atob(accessToken.split(".")[1]));
             customerProfile = await CustomerService.customerByEmail(decodedToken.sub);
         } catch (error) {
             console.error(error);
@@ -58,57 +57,46 @@ const CartPanel: React.FC<CartPanelProps> = ({ product, isOpen, onClose }) => {
             return;
         }
 
-        let cartId = localStorage.getItem("cartId");
-
-        if (!cartId) {
-            cartId = "ORD-" + Date.now();
-            const cart: Cart = {
-                id: cartId,
-                customerId: decodedToken.sub,
-                customerAgeGroup: "",
-                customerReligion: customerProfile.religion || "Buddhism",
-                city: customerProfile.city || "Colombo",
-                province: customerProfile.province || "Western",
-                buyingDate: new Date().toISOString(),
-                paymentMethod: "",
-                orderStatus: CartStatusType.ACTIVE,
-                deliveryType: "",
-                deliveryStatus: DeliveryStatusType.PENDING,
-                createdAt: new Date().toISOString(),
-                items: []
-            };
-
-            try {
-                const response = await CartService.create(cart);
-                cartId = response.data.id;
-                localStorage.setItem("cartId", cartId || "");
-            } catch (error) {
-                console.error(error);
-                Swal.fire("Error", "Failed to create cart", "error");
-                return;
-            }
-        }
-
-        const cartItem: CartItem = {
-            cartId: cartId || "",
-            productCode: product.productCode,
-            productName: product.productName,
-            productCategory: product.categoryId,
-            quantity: quantity,
-            unitPrice: product.pricePerKg || 0,
-            discount: product.discount || 0,
-            rate: product.pricePerKg || 0
+        var discount = originalPrice - discountPrice;
+        const orderPayload: OrderRequest = {
+            customerId: customerProfile.data.email,
+            customerAgeGroup: "",
+            customerReligion: customerProfile.data.religion,
+            city: customerProfile.data.city,
+            province: customerProfile.data.province,
+            paymentMethod: "CARD",
+            orderStatus: "ACTIVE",
+            deliveryType: "HOME_DELIVERY",
+            deliveryStatus: "PENDING",
+            items: [
+                {
+                    productCode: product.productCode,
+                    productName: product.productName,
+                    productCategory: productCategoryName,
+                    quantity: quantity,
+                    unitPrice: product.pricePerKg,
+                    discount: hasDiscount ? (discount ?? 0) : 0,
+                    rate: 0
+                }
+            ]
         };
 
+
         try {
-            await CartService.addOrderItems(cartId || "", cartItem);
-            Swal.fire("Success", "Item added to cart", "success");
-            onClose();
+            const response = await CartService.addItemsToCart(orderPayload);
+
+            if (response.success) {
+                Swal.fire("Success", "Item added to cart", "success");
+                onClose();
+            } else {
+                Swal.fire("Error", response.message || "Failed to add item", "error");
+            }
         } catch (error) {
             console.error(error);
-            Swal.fire("Error", "Failed to add item to cart", "error");
+            Swal.fire("Error", "Something went wrong", "error");
         }
     }
+
 
     return (
         <>

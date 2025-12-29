@@ -6,6 +6,8 @@ import {
     MDBIcon,
     MDBTooltip,
 } from "mdb-react-ui-kit";
+import { ChatBotService, type ReportResponse } from "../../../../services/ChatBotService";
+import Swal from "sweetalert2";
 
 interface ChatMessage {
     sender: "user" | "bot";
@@ -16,10 +18,22 @@ interface ChatBoxProps {
     onClose: () => void;
 }
 
+const reports = [
+    { report_code: "DSR001", report_name: "Daily Sales" },
+    { report_code: "WSR001", report_name: "Weekly Sales" },
+    { report_code: "MPR001", report_name: "Monthly Sales Report" },
+    { report_code: "ISR001", report_name: "Inventory Stock" },
+    { report_code: "CFR001", report_name: "Customer Feedback" },
+    { report_code: "RPR001", report_name: "Revenue Report" },
+    { report_code: "CPBR001", report_name: "Customer Purchase Trends" },
+    { report_code: "RRR001", report_name: "Refunds & Returns" },
+    { report_code: "CSR001", report_name: "Customer Segmentation" }
+];
+
 const sampleQuestions: string[] = [
-    "What are your pricing plans?",
-    "How does AI assistance work?",
-    "Can I connect to external APIs?",
+    "I want to generate a daily sales report",
+    "I want weekly sales details",
+    "I want to generate a monthly performance report",
 ];
 
 const ChatBox: React.FC<ChatBoxProps> = ({ onClose }) => {
@@ -27,42 +41,173 @@ const ChatBox: React.FC<ChatBoxProps> = ({ onClose }) => {
     const [showSamples, setShowSamples] = useState<boolean>(false);
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [inputText, setInputText] = useState<string>("");
+    const [questionListForReport, setQueationListForReport] = useState<string[]>([])
 
-    const handleSend = (): void => {
+    const [journeyStage, setJournerStage] = useState<number>(0);
+    const [questionIndex, setQuestionIndex] = useState(0);
+    const [parameterAnswers, setParameterAnswers] = useState<Record<string, string>>({});
+    const [askingParameters, setAskingParameters] = useState(false);
+
+    const handleSend = async (): Promise<void> => {
         if (!inputText.trim()) return;
 
         const userMsg: ChatMessage = { sender: "user", text: inputText.trim() };
         setMessages((prev) => [...prev, userMsg]);
+        const currentInput = inputText.trim();
         setInputText("");
 
-        // Simulate bot response
+        if (!journeyStage) {
+            const result: ReportResponse = await ChatBotService.generateReport(currentInput);
+            console.log(result);
+
+            if (result) {
+                const report = reports.find(r => r.report_code === result.report_code);
+                setJournerStage(1);
+                setQueationListForReport(result.parameters_for_report_generate || []);
+                setParameterAnswers({});
+                setQuestionIndex(0);
+
+                if (report) {
+                    setTimeout(() => {
+                        const botMsg: ChatMessage = {
+                            sender: "bot",
+                            text: `Do you want to generate <b>${report.report_name}</b> Report?`
+                        };
+                        setMessages((prev) => [...prev, botMsg]);
+                    }, 600);
+
+                    setTimeout(() => {
+                        const botMsg: ChatMessage = {
+                            sender: "bot",
+                            text: `Answer: Yes / No only.`
+                        };
+                        setMessages((prev) => [...prev, botMsg]);
+                    }, 1200);
+                }
+            }
+            return;
+        }
+
+        if (journeyStage === 1) {
+            const normalizedInput = currentInput.toLowerCase();
+
+            if (normalizedInput !== "yes" && normalizedInput !== "no") {
+                setTimeout(() => {
+                    const botMsg: ChatMessage = {
+                        sender: "bot",
+                        text: `Answer must be: Yes or No only.`
+                    };
+                    setMessages((prev) => [...prev, botMsg]);
+                }, 600);
+                return;
+            }
+
+            if (normalizedInput === "no") {
+                setTimeout(() => {
+                    const botMsg: ChatMessage = {
+                        sender: "bot",
+                        text: `Okay, the process has been cancelled.`
+                    };
+                    setMessages((prev) => [...prev, botMsg]);
+                }, 600);
+                setJournerStage(0);
+                return;
+            }
+
+            if (normalizedInput === "yes") {
+                setTimeout(() => {
+                    const botMsg: ChatMessage = {
+                        sender: "bot",
+                        text: `Great! Let's provide the report parameters one by one.`
+                    };
+                    setMessages(prev => [...prev, botMsg]);
+                    setJournerStage(2);
+                    askNextParameter(0);
+                }, 600);
+                return;
+            }
+        }
+
+        if (journeyStage === 2) {
+            const currentQuestion = questionListForReport[questionIndex];
+            setParameterAnswers(prev => ({
+                ...prev,
+                [currentQuestion]: currentInput
+            }));
+
+            const nextIndex = questionIndex + 1;
+            if (nextIndex < questionListForReport.length) {
+                setQuestionIndex(nextIndex);
+                askNextParameter(nextIndex);
+            } else {
+                setJournerStage(0);
+                setTimeout(() => {
+                    const finalMessage = Object.entries({
+                        ...parameterAnswers,
+                        [currentQuestion]: currentInput
+                    })
+                        .map(([key, value]) => `${key}: ${value}`)
+                        .join(", ");
+
+                    const botMsg: ChatMessage = {
+                        sender: "bot",
+                        text: `
+                                🎉 <b>All Parameters Collected!</b> 🎉<br/><br/>
+                                ${Object.entries({ ...parameterAnswers, [currentQuestion]: currentInput })
+                                                            .map(([key, value], idx) => `✅ <b>${key}</b>: ${value}`)
+                                                            .join("<br/>")}<br/><br/>
+                                You can now proceed with the report generation. 📊
+                            `
+                    };
+                    setMessages(prev => [...prev, botMsg]);
+
+
+                }, 600);
+            }
+        }
+    };
+
+    const askNextParameter = (index: number) => {
+        const question = questionListForReport[index];
         setTimeout(() => {
             const botMsg: ChatMessage = {
                 sender: "bot",
-                text: `You asked: "${userMsg.text}". Response coming soon...`,
+                text: `${index + 1}. ${question}:`
             };
-            setMessages((prev) => [...prev, botMsg]);
+            setMessages(prev => [...prev, botMsg]);
         }, 600);
     };
 
     const handleClear = (): void => {
-        setMessages([]);
-        setShowSamples(false);
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you really want to clear the chat?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, clear it!",
+            cancelButtonText: "No, keep it"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "Confirm again",
+                    text: "This will permanently remove all messages. Proceed?",
+                    icon: "question",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, clear",
+                    cancelButtonText: "Cancel"
+                }).then((secondResult) => {
+                    if (secondResult.isConfirmed) {
+                        setMessages([]);
+                        setShowSamples(false);
+                        Swal.fire("Cleared!", "Chat has been cleared.", "success");
+                    }
+                });
+            }
+        });
     };
 
     const handleSampleClick = (question: string): void => {
-        const userMsg: ChatMessage = { sender: "user", text: question };
-        setMessages((prev) => [...prev, userMsg]);
-        setShowSamples(false);
-
-        // Simulate bot reply
-        setTimeout(() => {
-            const botMsg: ChatMessage = {
-                sender: "bot",
-                text: `Answer for "${question}" coming soon...`,
-            };
-            setMessages((prev) => [...prev, botMsg]);
-        }, 500);
+        setInputText(question);
     };
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -177,28 +322,25 @@ const ChatBox: React.FC<ChatBoxProps> = ({ onClose }) => {
                                             key={i}
                                             style={{
                                                 display: "flex",
-                                                justifyContent:
-                                                    msg.sender === "user" ? "flex-end" : "flex-start",
+                                                justifyContent: msg.sender === "user" ? "flex-end" : "flex-start",
                                                 marginBottom: "0.4rem",
                                             }}
                                         >
                                             <div
                                                 style={{
-                                                    backgroundColor:
-                                                        msg.sender === "user" ? "#007bff" : "#e9ecef",
-                                                    color:
-                                                        msg.sender === "user" ? "white" : "black",
+                                                    backgroundColor: msg.sender === "user" ? "#007bff" : "#e9ecef",
+                                                    color: msg.sender === "user" ? "white" : "black",
                                                     padding: "0.5rem 0.75rem",
                                                     borderRadius: "12px",
                                                     maxWidth: "70%",
                                                     wordBreak: "break-word",
                                                 }}
+                                                {...(msg.sender === "bot" ? { dangerouslySetInnerHTML: { __html: msg.text } } : {})}
                                             >
-                                                {msg.text}
+                                                {msg.sender === "user" ? msg.text : null}
                                             </div>
                                         </div>
-                                    ))
-                                )}
+                                    )))}
                             </div>
 
                             {/* Input Row + Show Samples Button */}
@@ -241,7 +383,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ onClose }) => {
                                     color="danger"
                                     size="sm"
                                     onClick={handleSend}
-                                    
+
                                 >
                                     <MDBIcon fas icon="paper-plane" />
                                 </MDBBtn>
